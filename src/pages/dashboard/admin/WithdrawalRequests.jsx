@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Wallet, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const WithdrawalRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -45,6 +46,13 @@ export const WithdrawalRequests = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Admin Operations', path: '/dashboard/admin-home' },
+          { label: 'Payout Requests' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Creator Withdrawal Requests</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

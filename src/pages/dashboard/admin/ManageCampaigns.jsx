@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FolderKanban, Trash2, Calendar, AlertCircle, CheckCircle } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const ManageCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
@@ -45,6 +46,13 @@ export const ManageCampaigns = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Admin Operations', path: '/dashboard/admin-home' },
+          { label: 'Manage All Campaigns' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Manage All Campaigns</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

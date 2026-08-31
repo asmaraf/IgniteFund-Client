@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { History, CheckCircle, CreditCard } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const PaymentHistory = () => {
   const [payments, setPayments] = useState([]);
@@ -24,6 +25,13 @@ export const PaymentHistory = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Supporter Studio', path: '/dashboard/supporter-home' },
+          { label: 'Payment History' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.5rem' }}>Payment History</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

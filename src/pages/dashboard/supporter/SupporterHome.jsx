@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Coins, Clock, CheckCircle, Compass, ArrowRight, FileText } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const SupporterHome = () => {
   const { user } = useAuth();
@@ -33,6 +34,8 @@ export const SupporterHome = () => {
 
   return (
     <div>
+      <Breadcrumb items={[{ label: 'Supporter Studio' }]} />
+
       {/* Welcome Banner */}
       <div
         className="glass-panel"

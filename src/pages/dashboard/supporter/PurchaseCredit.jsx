@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const PurchaseCredit = () => {
   const { user, refreshUser } = useAuth();
@@ -74,6 +75,13 @@ export const PurchaseCredit = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Supporter Studio', path: '/dashboard/supporter-home' },
+          { label: 'Purchase Credits' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2.5rem' }}>
         <span className="badge badge-category" style={{ marginBottom: '0.65rem' }}>
           <Coins size={13} /> INSTANT REPLENISHMENT

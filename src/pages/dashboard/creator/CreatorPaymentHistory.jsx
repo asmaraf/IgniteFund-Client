@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { History, CheckCircle, Clock, Wallet } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const CreatorPaymentHistory = () => {
   const [withdrawals, setWithdrawals] = useState([]);
@@ -24,6 +25,13 @@ export const CreatorPaymentHistory = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Creator Studio', path: '/dashboard/creator-home' },
+          { label: 'Payout History' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Withdrawal Payout History</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

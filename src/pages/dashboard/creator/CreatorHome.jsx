@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const CreatorHome = () => {
   const { user } = useAuth();
@@ -89,6 +90,8 @@ export const CreatorHome = () => {
 
   return (
     <div>
+      <Breadcrumb items={[{ label: 'Creator Studio' }]} />
+
       {/* Top Banner */}
       <div
         className="glass-panel"

@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const AdminHome = () => {
   const [stats, setStats] = useState({
@@ -43,6 +44,8 @@ export const AdminHome = () => {
 
   return (
     <div>
+      <Breadcrumb items={[{ label: 'Admin Operations' }]} />
+
       {/* Top Banner */}
       <div
         className="glass-panel"

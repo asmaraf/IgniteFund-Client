@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const Withdrawals = () => {
   const { user, refreshUser } = useAuth();
@@ -78,6 +79,13 @@ export const Withdrawals = () => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <Breadcrumb
+        items={[
+          { label: 'Creator Studio', path: '/dashboard/creator-home' },
+          { label: 'Credit Withdrawals' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Creator Withdrawals</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

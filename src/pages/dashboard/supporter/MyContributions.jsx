@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FileText, CheckCircle, Clock, XCircle, ChevronLeft, ChevronRight, Compass } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const MyContributions = () => {
   const [contributions, setContributions] = useState([]);
@@ -51,6 +52,13 @@ export const MyContributions = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Supporter Studio', path: '/dashboard/supporter-home' },
+          { label: 'My Contributions' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.5rem' }}>My Contributions</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

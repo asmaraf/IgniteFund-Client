@@ -12,6 +12,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const AddNewCampaign = () => {
   const navigate = useNavigate();
@@ -100,6 +101,13 @@ export const AddNewCampaign = () => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <Breadcrumb
+        items={[
+          { label: 'Creator Studio', path: '/dashboard/creator-home' },
+          { label: 'Launch New Campaign' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Launch New Campaign</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

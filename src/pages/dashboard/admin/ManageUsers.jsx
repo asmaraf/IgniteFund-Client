@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Users, Trash2, Shield, CheckCircle, AlertCircle } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const ManageUsers = () => {
   const { user: currentUser } = useAuth();
@@ -68,6 +69,13 @@ export const ManageUsers = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Admin Operations', path: '/dashboard/admin-home' },
+          { label: 'User Directory' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Manage Platform Users</h1>
         <p style={{ color: 'var(--text-secondary)' }}>

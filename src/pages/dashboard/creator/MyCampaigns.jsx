@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const MyCampaigns = () => {
   const { refreshUser } = useAuth();
@@ -122,6 +123,13 @@ export const MyCampaigns = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Creator Studio', path: '/dashboard/creator-home' },
+          { label: 'My Campaigns' },
+        ]}
+      />
+
       <div
         style={{
           display: 'flex',

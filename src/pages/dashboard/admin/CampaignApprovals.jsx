@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckSquare, CheckCircle, XCircle, Calendar, AlertCircle } from 'lucide-react';
 import { api } from '../../../services/api';
+import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const CampaignApprovals = () => {
   const [pendingCampaigns, setPendingCampaigns] = useState([]);
@@ -45,6 +46,13 @@ export const CampaignApprovals = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'Admin Operations', path: '/dashboard/admin-home' },
+          { label: 'Campaign Approvals' },
+        ]}
+      />
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem' }}>Campaign Approvals</h1>
         <p style={{ color: 'var(--text-secondary)' }}>
