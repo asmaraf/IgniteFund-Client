@@ -83,67 +83,164 @@ export const AdminHome = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
           gap: '1.5rem',
           marginBottom: '3rem',
         }}
       >
         {/* Total Supporters */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL SUPPORTERS</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
-              <Users size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              TOTAL SUPPORTERS
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(16, 185, 129, 0.15)',
+                color: '#34d399',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Users size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800 }}>{stats.totalSupporters}</h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.1 }}>{stats.totalSupporters}</h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
             Active project backers
           </p>
         </div>
 
         {/* Total Creators */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL CREATORS</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(99, 102, 241, 0.15)', color: '#6366f1' }}>
-              <Compass size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              TOTAL CREATORS
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(99, 102, 241, 0.15)',
+                color: '#6366f1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Compass size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800 }}>{stats.totalCreators}</h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.1 }}>{stats.totalCreators}</h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
             Innovators & project launchers
           </p>
         </div>
 
         {/* Total Available Credits */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL CREDITS IN CIRCULATION</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
-              <Coins size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              TOTAL CREDITS IN CIRCULATION
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(245, 158, 11, 0.15)',
+                color: '#fbbf24',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Coins size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#fbbf24' }}>
-            {stats.totalAvailableCredits}
-          </h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, color: '#fbbf24', lineHeight: 1.1 }}>
+              {stats.totalAvailableCredits}
+            </h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
             Sum of all users' credits
           </p>
         </div>
 
         {/* Total Payments Processed */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>PAYMENTS PROCESSED</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(6, 182, 212, 0.15)', color: '#06b6d4' }}>
-              <DollarSign size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              PAYMENTS PROCESSED
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(6, 182, 212, 0.15)',
+                color: '#06b6d4',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <DollarSign size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>
-            ${stats.totalPaymentsProcessed} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>USD</span>
-          </h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--accent-cyan)', lineHeight: 1.1 }}>
+              ${stats.totalPaymentsProcessed}{' '}
+              <span style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--text-muted)' }}>USD</span>
+            </h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
             Gross Stripe purchases
           </p>
         </div>

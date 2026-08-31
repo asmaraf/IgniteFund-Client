@@ -184,102 +184,195 @@ export const DashboardLayout = () => {
       </header>
 
       {/* Main Dashboard Layout Area (Sidebar + Content) */}
-      <div style={{ display: 'flex', flexGrow: 1 }}>
+      <div style={{ display: 'flex', flexGrow: 1, minHeight: 'calc(100vh - 70px)' }}>
         {/* Navigation Sidebar */}
         <aside
           className={`dashboard-sidebar ${sidebarOpen ? 'open' : ''}`}
           style={{
-            width: '260px',
+            width: '270px',
             backgroundColor: 'var(--bg-surface)',
             borderRight: '1px solid var(--border-subtle)',
-            padding: '1.75rem 1rem',
+            padding: '1.5rem 1.1rem',
             display: 'flex',
             flexDirection: 'column',
+            gap: '1.25rem',
             flexShrink: 0,
           }}
         >
-          {/* User card in sidebar */}
+          {/* User profile card in sidebar */}
           <div
             style={{
-              padding: '1rem',
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: 'var(--radius-md)',
+              padding: '0.85rem 1rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.025)',
+              borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-subtle)',
-              marginBottom: '1.5rem',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.75rem',
+              gap: '0.85rem',
             }}
           >
             <img
-              src={user?.photo_url}
+              src={user?.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'}
               alt={user?.name}
-              style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }}
+              style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '10px',
+                border: '1.5px solid var(--primary)',
+                objectFit: 'cover',
+                flexShrink: 0,
+              }}
             />
-            <div style={{ overflow: 'hidden' }}>
-              <p style={{ fontSize: '0.875rem', fontWeight: 700, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+            <div style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+              <span
+                style={{
+                  fontSize: '0.9rem',
+                  fontWeight: 700,
+                  color: 'var(--text-primary)',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                }}
+              >
                 {user?.name}
-              </p>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                {user?.role} Dashboard
-              </p>
+              </span>
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  color:
+                    user?.role === 'Admin'
+                      ? '#fb7185'
+                      : user?.role === 'Creator'
+                      ? '#a5b4fc'
+                      : '#34d399',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {user?.role} Workspace
+              </span>
             </div>
           </div>
 
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '0 0.5rem 0.5rem 0.5rem' }}>
-            Navigation
+          {/* Navigation Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div
+              style={{
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                color: 'var(--text-muted)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                padding: '0 0.85rem',
+              }}
+            >
+              Navigation
+            </div>
+
+            {/* Navigation Links with fixed icon width and aligned text */}
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+              {navLinks.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setSidebarOpen(false)}
+                  className={({ isActive }) =>
+                    `dashboard-nav-item ${isActive ? 'active' : ''}`
+                  }
+                  style={({ isActive }) => ({
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.85rem',
+                    padding: '0.7rem 0.95rem',
+                    borderRadius: 'var(--radius-md)',
+                    fontSize: '0.9rem',
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                    background: isActive
+                      ? 'linear-gradient(90deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.05) 100%)'
+                      : 'transparent',
+                    border: isActive
+                      ? '1px solid rgba(99, 102, 241, 0.35)'
+                      : '1px solid transparent',
+                    transition: 'all var(--transition-fast)',
+                    textDecoration: 'none',
+                  })}
+                >
+                  <div
+                    style={{
+                      width: '22px',
+                      height: '22px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <item.icon size={18} color="currentColor" />
+                  </div>
+                  <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{item.label}</span>
+                </NavLink>
+              ))}
+            </nav>
           </div>
 
-          {/* Navigation Links */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            {navLinks.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `dashboard-nav-item ${isActive ? 'active' : ''}`
-                }
-                style={({ isActive }) => ({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.65rem 0.85rem',
-                  borderRadius: 'var(--radius-md)',
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                  color: isActive ? '#ffffff' : 'var(--text-secondary)',
-                  backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
-                  border: isActive ? '1px solid rgba(99, 102, 241, 0.4)' : '1px solid transparent',
-                  transition: 'all var(--transition-fast)',
-                })}
-              >
-                <item.icon size={18} color="currentColor" />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </nav>
-
-          {/* Return Home Link */}
-          <div style={{ marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid var(--border-subtle)' }}>
+          {/* Bottom Quick Return Link */}
+          <div
+            style={{
+              marginTop: 'auto',
+              paddingTop: '1.25rem',
+              borderTop: '1px solid var(--border-subtle)',
+            }}
+          >
             <Link
               to="/"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.85rem',
+                gap: '0.85rem',
+                padding: '0.7rem 0.95rem',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.875rem',
                 color: 'var(--text-muted)',
-                padding: '0.5rem',
+                textDecoration: 'none',
+                transition: 'all var(--transition-fast)',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+                e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = 'var(--text-muted)';
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
-              <Sparkles size={16} /> Return to Public Site
+              <div
+                style={{
+                  width: '22px',
+                  height: '22px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <Sparkles size={16} />
+              </div>
+              <span>Return to Public Site</span>
             </Link>
           </div>
         </aside>
 
         {/* Sections Based on Routes */}
-        <main style={{ flexGrow: 1, padding: '2.5rem 2rem', overflowX: 'hidden' }}>
+        <main
+          style={{
+            flexGrow: 1,
+            padding: '2.25rem 2.5rem',
+            overflowX: 'hidden',
+            minWidth: 0,
+          }}
+        >
           <Outlet />
         </main>
       </div>

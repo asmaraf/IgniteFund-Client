@@ -112,11 +112,18 @@ export const CreatorHome = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <Link to="/dashboard/add-campaign" className="btn btn-primary">
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <Link to="/dashboard/add-campaign" className="btn btn-primary" style={{ boxShadow: '0 4px 14px rgba(99, 102, 241, 0.4)' }}>
             <PlusCircle size={18} /> Launch New Campaign
           </Link>
-          <Link to="/dashboard/withdrawals" className="btn btn-secondary">
+          <Link
+            to="/dashboard/withdrawals"
+            className="btn btn-secondary"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderColor: 'rgba(255, 255, 255, 0.15)',
+            }}
+          >
             <Wallet size={18} /> Withdraw Funds
           </Link>
         </div>
@@ -141,56 +148,129 @@ export const CreatorHome = () => {
         </div>
       )}
 
-      {/* 3 Metric Cards */}
+      {/* 3 Metric Cards with equal height and vertical alignment */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
           gap: '1.5rem',
           marginBottom: '3rem',
         }}
       >
         {/* Total Campaigns */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL CAMPAIGNS</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(99, 102, 241, 0.15)', color: '#6366f1' }}>
-              <FolderKanban size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              TOTAL CAMPAIGNS
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(99, 102, 241, 0.15)',
+                color: '#6366f1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <FolderKanban size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800 }}>{stats.totalCampaigns}</h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.1 }}>{stats.totalCampaigns}</h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
             Total projects created by you
           </p>
         </div>
 
         {/* Active Campaigns */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>ACTIVE CAMPAIGNS</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981' }}>
-              <Clock size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              ACTIVE CAMPAIGNS
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(16, 185, 129, 0.15)',
+                color: '#10b981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Clock size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800 }}>{stats.activeCampaigns}</h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
-            Approved & deadline active
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.1 }}>{stats.activeCampaigns}</h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+            Approved & active before deadline
           </p>
         </div>
 
         {/* Total Amount Raised */}
-        <div className="card" style={{ padding: '1.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL AMOUNT RAISED</span>
-            <div style={{ padding: '0.5rem', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
-              <Coins size={20} />
+        <div
+          className="card"
+          style={{
+            padding: '1.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: '160px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+              TOTAL AMOUNT RAISED
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                background: 'rgba(245, 158, 11, 0.15)',
+                color: '#fbbf24',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Coins size={18} />
             </div>
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>
-            {stats.totalRaised} <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>Credits</span>
-          </h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
-            Eligible for withdrawal: {stats.raisedCredits} credits (${(stats.raisedCredits / 20).toFixed(2)})
+          <div style={{ margin: '0.5rem 0' }}>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--accent-cyan)', lineHeight: 1.1 }}>
+              {stats.totalRaised}{' '}
+              <span style={{ fontSize: '1rem', fontWeight: 500, color: 'var(--text-muted)' }}>Credits</span>
+            </h2>
+          </div>
+          <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+            Eligible for withdrawal: <strong style={{ color: '#fbbf24' }}>{stats.raisedCredits} credits</strong> (${(stats.raisedCredits / 20).toFixed(2)})
           </p>
         </div>
       </div>
@@ -224,17 +304,17 @@ export const CreatorHome = () => {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Supporter Name</th>
+                  <th style={{ paddingLeft: '1.5rem' }}>Supporter Name</th>
                   <th>Campaign Title</th>
                   <th>Contribution Amount</th>
-                  <th>Details</th>
-                  <th>Actions</th>
+                  <th style={{ textAlign: 'center' }}>Details</th>
+                  <th style={{ textAlign: 'right', paddingRight: '1.5rem' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {pendingContributions.map((contrib) => (
                   <tr key={contrib._id}>
-                    <td>
+                    <td style={{ paddingLeft: '1.5rem' }}>
                       <div>
                         <span style={{ fontWeight: 600 }}>{contrib.supporter_name}</span>
                         <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -248,7 +328,7 @@ export const CreatorHome = () => {
                         {contrib.contribution_amount} Credits
                       </span>
                     </td>
-                    <td>
+                    <td style={{ textAlign: 'center' }}>
                       {/* View Contribution Button (opens modal) */}
                       <button
                         onClick={() => setSelectedContribution(contrib)}
@@ -258,9 +338,9 @@ export const CreatorHome = () => {
                         <Eye size={14} /> View
                       </button>
                     </td>
-                    <td>
+                    <td style={{ textAlign: 'right', paddingRight: '1.5rem' }}>
                       {/* Actionable Buttons: Approve & Reject */}
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                         <button
                           onClick={() => handleApprove(contrib._id)}
                           disabled={actionLoading}
