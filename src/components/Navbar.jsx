@@ -142,7 +142,9 @@ export const Navbar = () => {
           style={{
             display: 'none',
             alignItems: 'center',
-            gap: '1.25rem',
+            gap: '0.75rem',
+            flexShrink: 0,
+            whiteSpace: 'nowrap',
           }}
           className="desktop-nav"
         >
@@ -153,6 +155,8 @@ export const Navbar = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
               borderColor: location.pathname === '/explore' ? 'var(--primary)' : 'var(--border-subtle)',
             }}
           >
@@ -163,10 +167,10 @@ export const Navbar = () => {
           {!user ? (
             /* For Not Logged-in Users */
             <>
-              <Link to="/login" className="btn btn-secondary btn-sm">
+              <Link to="/login" className="btn btn-secondary btn-sm" style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>
                 Login
               </Link>
-              <Link to="/register" className="btn btn-primary btn-sm">
+              <Link to="/register" className="btn btn-primary btn-sm" style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>
                 Register
               </Link>
               <a
@@ -174,7 +178,7 @@ export const Navbar = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, whiteSpace: 'nowrap' }}
                 title="View Client Repository on GitHub"
               >
                 <GithubIcon size={16} />
@@ -187,7 +191,7 @@ export const Navbar = () => {
               <Link
                 to={getDashboardHome()}
                 className="btn btn-secondary btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, whiteSpace: 'nowrap' }}
               >
                 <LayoutDashboard size={16} color="var(--accent-cyan)" />
                 Dashboard
@@ -206,6 +210,8 @@ export const Navbar = () => {
                   color: '#fbbf24',
                   fontWeight: 600,
                   fontSize: '0.85rem',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
                 }}
                 title="Your platform credits balance"
               >
@@ -213,36 +219,37 @@ export const Navbar = () => {
                 <span>{user.credits || 0} Credits</span>
               </div>
 
-              {/* User Profile avatar + info */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <img
-                  src={user.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80'}
-                  alt={user.name}
-                  style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '50%',
-                    border: '2px solid var(--primary)',
-                    objectFit: 'cover',
-                  }}
-                />
-                <button
-                  onClick={handleLogout}
-                  className="btn btn-danger btn-sm"
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}
-                  title="Logout"
-                >
-                  <LogOut size={15} />
-                  Logout
-                </button>
-              </div>
+              {/* User Profile avatar */}
+              <img
+                src={user.photo_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80'}
+                alt={user.name}
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '50%',
+                  border: '2px solid var(--primary)',
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                }}
+              />
+
+              {/* Logout button */}
+              <button
+                onClick={handleLogout}
+                className="btn btn-danger btn-sm"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0, whiteSpace: 'nowrap' }}
+                title="Logout"
+              >
+                <LogOut size={15} />
+                Logout
+              </button>
 
               <a
                 href={clientRepoUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, whiteSpace: 'nowrap' }}
               >
                 <GithubIcon size={16} />
                 Join as Developer
@@ -349,9 +356,16 @@ export const Navbar = () => {
       )}
 
       <style>{`
-        @media (min-width: 820px) {
+        @media (max-width: 768px) {
+          .top-trust-bar { display: none !important; }
+        }
+        @media (min-width: 1040px) {
           .desktop-nav { display: flex !important; }
           .mobile-menu-btn { display: none !important; }
+        }
+        @media (max-width: 1039px) {
+          .desktop-nav { display: none !important; }
+          .mobile-menu-btn { display: flex !important; }
         }
       `}</style>
       </nav>

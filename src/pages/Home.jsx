@@ -222,11 +222,12 @@ export const Home = () => {
 
                     <h1
                       style={{
-                        fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)',
+                        fontSize: 'clamp(1.75rem, 4.2vw, 3.2rem)',
                         fontWeight: 800,
-                        lineHeight: 1.18,
+                        lineHeight: 1.2,
                         marginBottom: '1.25rem',
                         letterSpacing: '-0.025em',
+                        wordBreak: 'break-word',
                       }}
                     >
                       {banner.title}
