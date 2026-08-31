@@ -12,6 +12,7 @@ export const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [googleRole, setGoogleRole] = useState('Supporter');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -64,7 +65,7 @@ export const Login = () => {
           name: userInfo.data.name || 'Google User',
           email: userInfo.data.email,
           photo_url: userInfo.data.picture,
-          role: 'Supporter',
+          role: googleRole,
         };
 
         const res = await googleLogin(googleUserPayload);
@@ -229,6 +230,34 @@ export const Login = () => {
           >
             Or continue with
           </span>
+        </div>
+
+        {/* Role selector for Google Sign-In */}
+        <div style={{ marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+            <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>Sign in with Google as:</span>
+            <span style={{ fontSize: '0.72rem', color: googleRole === 'Creator' ? '#a5b4fc' : '#34d399', fontWeight: 600 }}>
+              {googleRole === 'Creator' ? '20 Bonus Credits' : '50 Bonus Credits'}
+            </span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+            <button
+              type="button"
+              onClick={() => setGoogleRole('Supporter')}
+              className={`btn btn-sm ${googleRole === 'Supporter' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ justifyContent: 'center', fontSize: '0.78rem', padding: '0.45rem' }}
+            >
+              Supporter
+            </button>
+            <button
+              type="button"
+              onClick={() => setGoogleRole('Creator')}
+              className={`btn btn-sm ${googleRole === 'Creator' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ justifyContent: 'center', fontSize: '0.78rem', padding: '0.45rem' }}
+            >
+              Creator
+            </button>
+          </div>
         </div>
 
         <button
