@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import {
   CreditCard,
@@ -8,6 +9,8 @@ import {
   Zap,
   Sparkles,
   Lock,
+  ExternalLink,
+  ArrowRight,
 } from 'lucide-react';
 import { api } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
@@ -15,6 +18,7 @@ import { Breadcrumb } from '../../../components/Breadcrumb';
 
 export const PurchaseCredit = () => {
   const { user, refreshUser } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const packages = [
     { credits: 100, price: 10, bonus: 'Popular for Beginners', icon: Coins, highlight: false },
@@ -32,12 +36,67 @@ export const PurchaseCredit = () => {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Handle return from official Stripe Checkout Sandbox
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+    const isSuccess = searchParams.get('success');
+    const isCanceled = searchParams.get('canceled');
+
+    if (isCanceled) {
+      setErrorMsg('Stripe checkout was cancelled. No charges were made.');
+      setSearchParams({});
+    }
+
+    if (sessionId && isSuccess === 'true') {
+      const verifySession = async () => {
+        setProcessing(true);
+        try {
+          const res = await api.verifyStripeSession(sessionId);
+          if (res.success) {
+            confetti({
+              particleCount: 120,
+              spread: 85,
+              origin: { y: 0.6 },
+            });
+            setSuccessMsg(res.message || 'Stripe payment verified successfully! Credits added.');
+            await refreshUser();
+          }
+        } catch (err) {
+          setErrorMsg(err.message || 'Failed to verify Stripe payment');
+        } finally {
+          setProcessing(false);
+          setSearchParams({});
+        }
+      };
+      verifySession();
+    }
+  }, [searchParams, refreshUser, setSearchParams]);
+
   const handleSelectPackage = (pkg) => {
     setSelectedPkg(pkg);
     setErrorMsg('');
     setSuccessMsg('');
   };
 
+  // Redirect to official Stripe Sandbox Hosted Checkout URL
+  const handleStripeSandboxRedirect = async () => {
+    if (!selectedPkg) return;
+    setProcessing(true);
+    setErrorMsg('');
+    try {
+      const res = await api.createStripeCheckoutSession(selectedPkg.credits);
+      if (res.success && res.url) {
+        window.location.href = res.url;
+      } else {
+        throw new Error(res.message || 'Failed to create Stripe checkout session');
+      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Stripe redirect failed. You can use the instant payment form below.');
+      setProcessing(false);
+    }
+  };
+
+  // In-page Instant Payment Simulation
   const handleProcessPayment = async (e) => {
     e.preventDefault();
     if (!selectedPkg) return;
@@ -46,10 +105,9 @@ export const PurchaseCredit = () => {
     setErrorMsg('');
 
     try {
-      // Confirm credit purchase with server (simulating Stripe payment verification)
       const res = await api.confirmCreditPurchase({
         credits: selectedPkg.credits,
-        paymentMethod: 'Card (Stripe)',
+        paymentMethod: 'Card (Stripe Test)',
         transactionId: `ch_stripe_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       });
 
@@ -59,7 +117,7 @@ export const PurchaseCredit = () => {
           spread: 80,
           origin: { y: 0.6 },
         });
-        setSuccessMsg(`Payment of $${selectedPkg.price} successful! ${selectedPkg.credits} credits have been added to your account.`);
+        setSuccessMsg(`Payment of $${selectedPkg.price} successful! ${selectedPkg.credits} credits added.`);
         await refreshUser();
         setTimeout(() => {
           setSelectedPkg(null);
@@ -242,6 +300,41 @@ export const PurchaseCredit = () => {
                 <CheckCircle size={18} /> {successMsg}
               </div>
             )}
+
+            {/* Official Stripe Hosted Sandbox Checkout */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <button
+                type="button"
+                onClick={handleStripeSandboxRedirect}
+                disabled={processing}
+                className="btn btn-amber btn-lg"
+                style={{ width: '100%', justifyContent: 'center', gap: '0.65rem' }}
+                id="stripe-hosted-checkout-btn"
+              >
+                <ExternalLink size={18} />
+                {processing ? 'Connecting to Stripe...' : `Redirect to Official Stripe Checkout ($${selectedPkg.price}.00)`}
+              </button>
+              <p style={{ textAlign: 'center', fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '0.45rem' }}>
+                Opens secure Stripe Sandbox checkout with official card verification
+              </p>
+            </div>
+
+            <div style={{ margin: '1.25rem 0', position: 'relative', textAlign: 'center' }}>
+              <div style={{ borderBottom: '1px solid var(--border-subtle)' }} />
+              <span
+                style={{
+                  position: 'relative',
+                  top: '-0.75rem',
+                  background: 'var(--bg-card)',
+                  padding: '0 0.75rem',
+                  color: 'var(--text-muted)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                }}
+              >
+                OR TEST WITH IN-PAGE CARD FORM
+              </span>
+            </div>
 
             <form onSubmit={handleProcessPayment}>
               <div className="form-group">

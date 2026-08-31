@@ -79,6 +79,10 @@ export const api = {
     request(`/withdrawals/admin/${id}/approve`, { method: 'PATCH' }),
 
   // Payments & Credits (Stripe)
+  createStripeCheckoutSession: (credits) =>
+    request('/payments/create-checkout-session', { method: 'POST', body: JSON.stringify({ credits }) }),
+  verifyStripeSession: (sessionId) =>
+    request('/payments/verify-session', { method: 'POST', body: JSON.stringify({ sessionId }) }),
   createPaymentIntent: (credits) =>
     request('/payments/create-intent', { method: 'POST', body: JSON.stringify({ credits }) }),
   confirmCreditPurchase: (data) =>
