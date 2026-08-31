@@ -870,20 +870,21 @@ export const Home = () => {
               768: { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
             }}
+            style={{ paddingBottom: '3rem' }}
           >
             {testimonials.map((t, idx) => (
-              <SwiperSlide key={idx}>
+              <SwiperSlide key={idx} style={{ height: 'auto', display: 'flex' }}>
                 <div
                   className="card"
                   style={{
                     padding: '2.25rem 1.75rem',
-                    height: '100%',
+                    width: '100%',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                   }}
                 >
-                  <div>
+                  <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginBottom: '1.5rem' }}>
                     <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.25rem' }}>
                       {[...Array(t.rating)].map((_, i) => (
                         <Star key={i} size={15} fill="#f59e0b" color="#f59e0b" />
@@ -892,9 +893,9 @@ export const Home = () => {
                     <p
                       style={{
                         fontSize: '0.925rem',
-                        lineHeight: 1.6,
+                        lineHeight: 1.65,
                         color: 'var(--text-primary)',
-                        marginBottom: '1.5rem',
+                        flexGrow: 1,
                       }}
                     >
                       "{t.quote}"
