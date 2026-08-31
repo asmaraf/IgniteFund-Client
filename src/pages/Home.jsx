@@ -113,8 +113,8 @@ export const Home = () => {
         'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80',
       ctaText: 'Back Medical Projects',
       ctaLink: '/explore?category=Health',
-      secondaryText: 'Developer Documentation',
-      secondaryLink: '/developer',
+      secondaryText: 'Start as a Supporter (+50 Credits)',
+      secondaryLink: '/register',
       metric: '88 Custom Fittings Completed',
     },
     {

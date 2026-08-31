@@ -119,11 +119,6 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/developer" style={{ transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = 'var(--primary)'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>
-                  Developer Portal &amp; API Specs
-                </Link>
-              </li>
-              <li>
                 <a href="#how-it-works" style={{ transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = 'var(--primary)'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>
                   How Platform Credits Work
                 </a>

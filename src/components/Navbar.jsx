@@ -55,7 +55,7 @@ export const Navbar = () => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             flexWrap: 'wrap',
             gap: '0.5rem',
           }}
@@ -73,20 +73,6 @@ export const Navbar = () => {
               <strong style={{ color: '#a5b4fc' }}>1,280</strong> Active Backers
             </span>
           </div>
-
-          <Link
-            to="/developer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              color: '#a5b4fc',
-              fontWeight: 500,
-              fontSize: '0.76rem',
-            }}
-          >
-            <Code size={13} /> Developer Portal &amp; API Specs
-          </Link>
         </div>
       </div>
 

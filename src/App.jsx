@@ -13,7 +13,6 @@ import { ExploreCampaigns } from './pages/ExploreCampaigns';
 import { CampaignDetails } from './pages/CampaignDetails';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
-import { DeveloperPortal } from './pages/DeveloperPortal';
 
 // Dashboard Layout & Pages
 import { DashboardLayout } from './pages/dashboard/DashboardLayout';
@@ -107,18 +106,6 @@ export const App = () => {
               <Navbar />
               <main style={{ flexGrow: 1 }}>
                 <Register />
-              </main>
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/developer"
-          element={
-            <>
-              <Navbar />
-              <main style={{ flexGrow: 1 }}>
-                <DeveloperPortal />
               </main>
               <Footer />
             </>
