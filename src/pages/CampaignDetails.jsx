@@ -13,6 +13,7 @@ import {
   Clock,
   Heart,
 } from 'lucide-react';
+import { Breadcrumb } from '../components/Breadcrumb';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -65,7 +66,7 @@ export const CampaignDetails = () => {
     }
 
     if (user.role !== 'Supporter') {
-      setPledgeError('Only users registered with the Supporter role can pledge credits.');
+      setPledgeError('Only registered Supporters can pledge credits to campaigns.');
       return;
     }
 
@@ -77,7 +78,7 @@ export const CampaignDetails = () => {
 
     if ((user.credits || 0) < amount) {
       setPledgeError(
-        `Insufficient credits. You have ${user.credits} credits. Please visit the Purchase Credits page to top up.`
+        `Insufficient credit balance. You currently have ${user.credits} credits. Please visit the Purchase Credits page to top up.`
       );
       return;
     }
@@ -91,11 +92,11 @@ export const CampaignDetails = () => {
 
       if (res.success) {
         confetti({
-          particleCount: 80,
-          spread: 70,
+          particleCount: 90,
+          spread: 75,
           origin: { y: 0.6 },
         });
-        setPledgeSuccess('Your contribution has been pledged and is awaiting Creator approval!');
+        setPledgeSuccess('Contribution pledged successfully! It is now in the Creator verification escrow.');
         await refreshUser();
       }
     } catch (err) {
@@ -132,17 +133,17 @@ export const CampaignDetails = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <div
-          style={{
-            width: '44px',
-            height: '44px',
-            border: '3px solid var(--border-subtle)',
-            borderTopColor: 'var(--primary)',
-            borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite',
-          }}
-        />
+      <div className="container" style={{ padding: '3.5rem 0' }}>
+        <div className="skeleton" style={{ height: '24px', width: '260px', marginBottom: '2rem' }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '2.5rem' }}>
+          <div className="skeleton" style={{ height: '420px', borderRadius: '16px' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="skeleton skeleton-title" style={{ height: '32px' }} />
+            <div className="skeleton skeleton-text" style={{ width: '80%' }} />
+            <div className="skeleton skeleton-text" style={{ width: '50%', marginBottom: '2rem' }} />
+            <div className="skeleton" style={{ height: '140px', borderRadius: '12px' }} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -155,7 +156,7 @@ export const CampaignDetails = () => {
           {error || 'The requested campaign does not exist or has been removed.'}
         </p>
         <Link to="/explore" className="btn btn-primary">
-          <ArrowLeft size={16} /> Back to Campaigns
+          <ArrowLeft size={16} /> Back to Projects Directory
         </Link>
       </div>
     );
@@ -165,15 +166,23 @@ export const CampaignDetails = () => {
   const deadlinePassed = new Date(campaign.deadline) < new Date();
 
   return (
-    <div style={{ padding: '3rem 0 5rem 0' }}>
+    <div style={{ padding: '2.5rem 0 5rem 0' }}>
       <div className="container">
-        {/* Back navigation & Report action */}
+        {/* Hierarchical Breadcrumb Navigation */}
+        <Breadcrumb
+          items={[
+            { label: 'Explore Campaigns', path: '/explore' },
+            { label: campaign.campaign_title },
+          ]}
+        />
+
+        {/* Action Header: Back & Report */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '2rem',
+            marginBottom: '1.5rem',
           }}
         >
           <Link
@@ -181,12 +190,12 @@ export const CampaignDetails = () => {
             className="btn btn-secondary btn-sm"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
           >
-            <ArrowLeft size={16} /> All Campaigns
+            <ArrowLeft size={15} /> Back to Directory
           </Link>
 
           <button
             onClick={() => setShowReportModal(true)}
-            className="btn btn-secondary btn-sm"
+            className="btn btn-outline btn-sm"
             style={{
               color: 'var(--text-muted)',
               fontSize: '0.8rem',
@@ -195,7 +204,7 @@ export const CampaignDetails = () => {
               gap: '0.4rem',
             }}
           >
-            <AlertTriangle size={14} color="var(--accent-rose)" /> Report Campaign
+            <AlertTriangle size={14} color="var(--accent-rose)" /> Flag Incident
           </button>
         </div>
 
@@ -361,7 +370,7 @@ export const CampaignDetails = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn btn-primary btn-lg"
+                  className="btn btn-amber btn-lg"
                   style={{ width: '100%', justifyContent: 'center' }}
                   id="pledge-submit-btn"
                 >

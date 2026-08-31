@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Filter, Calendar, TrendingUp, Sparkles, AlertCircle } from 'lucide-react';
+import { Search, Filter, Calendar, TrendingUp, Sparkles, AlertCircle, Clock, RotateCw, Layers } from 'lucide-react';
+import { Breadcrumb } from '../components/Breadcrumb';
 import { api } from '../services/api';
 
 export const ExploreCampaigns = () => {
@@ -17,6 +18,7 @@ export const ExploreCampaigns = () => {
 
   const fetchCampaigns = async () => {
     setLoading(true);
+    setError('');
     try {
       const queryParams = new URLSearchParams();
       queryParams.append('status', 'approved');
@@ -28,9 +30,11 @@ export const ExploreCampaigns = () => {
       const res = await api.getCampaigns(queryParams.toString());
       if (res.success) {
         setCampaigns(res.data || []);
+      } else {
+        setError('Failed to fetch campaigns from platform registry.');
       }
     } catch (err) {
-      setError(err.message || 'Failed to load campaigns');
+      setError(err.message || 'Unable to connect to platform API.');
     } finally {
       setLoading(false);
     }
@@ -52,16 +56,22 @@ export const ExploreCampaigns = () => {
   };
 
   return (
-    <div style={{ padding: '3.5rem 0', minHeight: '80vh' }}>
+    <div style={{ padding: '2.5rem 0 5rem 0', minHeight: '80vh' }}>
       <div className="container">
+        {/* Breadcrumb Navigation */}
+        <Breadcrumb items={[{ label: 'Explore Campaigns' }]} />
+
         {/* Page Header */}
         <div style={{ marginBottom: '2.5rem' }}>
-          <span className="badge badge-category" style={{ marginBottom: '0.65rem' }}>
-            <Sparkles size={13} /> CURATED INNOVATIONS
+          <span className="badge badge-amber" style={{ marginBottom: '0.65rem' }}>
+            <Sparkles size={13} /> AUDITED CAMPAIGNS DIRECTORY
           </span>
-          <h1 style={{ fontSize: '2.6rem', fontWeight: 800, marginBottom: '0.75rem' }}>Explore Campaigns</h1>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '640px' }}>
-            Browse active, admin-verified campaigns looking for supporter contributions. Back projects and receive creator rewards.
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.6rem' }}>
+            Verified Hardware &amp; Social Initiatives
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '720px', fontSize: '1rem', lineHeight: 1.6 }}>
+            Browse active campaigns approved by IgniteFund administrators. Back verified initiatives with platform credits
+            and receive direct production updates from lead creators.
           </p>
         </div>
 
@@ -84,7 +94,7 @@ export const ExploreCampaigns = () => {
               flexWrap: 'wrap',
             }}
           >
-            <div style={{ position: 'relative', flexGrow: 1, minWidth: '240px' }}>
+            <div style={{ position: 'relative', flexGrow: 1, minWidth: '260px' }}>
               <Search
                 size={18}
                 style={{
@@ -97,7 +107,7 @@ export const ExploreCampaigns = () => {
               />
               <input
                 type="text"
-                placeholder="Search campaigns by title, keywords, or creator..."
+                placeholder="Search campaigns by prototype, lead engineer, or keyword..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="form-input"
@@ -105,8 +115,20 @@ export const ExploreCampaigns = () => {
               />
             </div>
             <button type="submit" className="btn btn-primary">
-              <Search size={16} /> Search
+              <Search size={16} /> Search Catalog
             </button>
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch('');
+                  fetchCampaigns();
+                }}
+                className="btn btn-outline"
+              >
+                Clear Search
+              </button>
+            )}
           </form>
 
           {/* Category Tabs & Sorting */}
@@ -142,35 +164,54 @@ export const ExploreCampaigns = () => {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="form-select"
-                style={{ padding: '0.4rem 0.85rem', fontSize: '0.85rem', width: 'auto' }}
+                style={{ width: 'auto', padding: '0.4rem 0.85rem', fontSize: '0.85rem' }}
               >
-                <option value="newest">Newest First</option>
-                <option value="deadline">Ending Soonest</option>
-                <option value="most-funded">Most Funded</option>
-                <option value="goal">Highest Goal</option>
+                <option value="newest">Most Recent Launches</option>
+                <option value="mostFunded">Highest Credits Raised</option>
+                <option value="endingSoon">Deadline Approaching</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* Campaign Cards Grid */}
-        {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '5rem 0' }}>
-            <div
-              style={{
-                width: '44px',
-                height: '44px',
-                border: '3px solid var(--border-subtle)',
-                borderTopColor: 'var(--primary)',
-                borderRadius: '50%',
-                animation: 'spin 0.8s linear infinite',
-              }}
-            />
+        {/* Error State */}
+        {error && (
+          <div
+            className="glass-panel"
+            style={{
+              padding: '2.5rem',
+              textAlign: 'center',
+              borderColor: 'rgba(244, 63, 94, 0.4)',
+              marginBottom: '3rem',
+            }}
+          >
+            <AlertCircle size={38} color="var(--accent-rose)" style={{ margin: '0 auto 0.75rem auto' }} />
+            <p style={{ color: '#fb7185', marginBottom: '1.25rem', fontSize: '0.95rem' }}>{error}</p>
+            <button onClick={fetchCampaigns} className="btn btn-secondary btn-sm">
+              <RotateCw size={14} /> Retry Fetching Catalog
+            </button>
           </div>
-        ) : error ? (
-          <div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--accent-rose)' }}>
-            <AlertCircle size={36} style={{ margin: '0 auto 1rem auto' }} />
-            <p>{error}</p>
+        )}
+
+        {/* Content Section: Skeletons, Empty State, or Grid */}
+        {loading ? (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '2rem',
+            }}
+          >
+            {[1, 2, 3, 4, 5, 6].map((sk) => (
+              <div key={sk} className="card skeleton-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
+                <div className="skeleton" style={{ height: '200px', borderRadius: '8px', marginBottom: '1.25rem' }} />
+                <div className="skeleton skeleton-title" />
+                <div className="skeleton skeleton-text" style={{ width: '92%' }} />
+                <div className="skeleton skeleton-text" style={{ width: '70%', marginBottom: '1.5rem' }} />
+                <div className="skeleton" style={{ height: '8px', borderRadius: '4px', marginTop: 'auto', marginBottom: '1rem' }} />
+                <div className="skeleton" style={{ height: '38px', borderRadius: '8px' }} />
+              </div>
+            ))}
           </div>
         ) : campaigns.length === 0 ? (
           <div
@@ -181,39 +222,58 @@ export const ExploreCampaigns = () => {
               color: 'var(--text-secondary)',
             }}
           >
-            <Filter size={40} style={{ margin: '0 auto 1rem auto', opacity: 0.4 }} />
-            <h3 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>No campaigns match your filter</h3>
-            <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-              Try broadening your search term or selecting a different category.
+            <Layers size={44} style={{ margin: '0 auto 1rem auto', opacity: 0.4 }} />
+            <h3 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>No projects match your filter</h3>
+            <p style={{ fontSize: '0.925rem', marginBottom: '1.5rem' }}>
+              Try adjusting your category selection or clear your search terms to discover more campaigns.
             </p>
             <button
               onClick={() => {
                 setSearch('');
                 setCategory('All');
-                setSortBy('newest');
               }}
-              className="btn btn-secondary"
+              className="btn btn-primary"
             >
-              Reset All Filters
+              Reset Filters &amp; View All
             </button>
           </div>
         ) : (
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
               gap: '2rem',
             }}
           >
-            {campaigns.map((camp) => {
-              const percent = Math.min(100, Math.round(((camp.amount_raised || 0) / camp.funding_goal) * 100));
+            {campaigns.map((campaign) => {
+              const percent = Math.min(
+                100,
+                Math.round(((campaign.amount_raised || 0) / campaign.funding_goal) * 100)
+              );
+
               return (
-                <div key={camp._id} className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
+                <div
+                  key={campaign._id}
+                  className="card"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    backgroundColor: 'var(--bg-card)',
+                  }}
+                >
+                  {/* Campaign Image */}
+                  <div style={{ position: 'relative', height: '210px', overflow: 'hidden' }}>
                     <img
-                      src={camp.campaign_image_url}
-                      alt={camp.campaign_title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      src={campaign.campaign_image_url}
+                      alt={campaign.campaign_title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        transition: 'transform 0.4s ease',
+                      }}
+                      onMouseOver={(e) => (e.target.style.transform = 'scale(1.04)')}
+                      onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}
                     />
                     <span
                       className="badge badge-category"
@@ -221,42 +281,41 @@ export const ExploreCampaigns = () => {
                         position: 'absolute',
                         top: '12px',
                         left: '12px',
-                        background: 'rgba(10, 14, 26, 0.85)',
-                        backdropFilter: 'blur(6px)',
+                        backdropFilter: 'blur(8px)',
+                        background: 'rgba(9, 13, 22, 0.85)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                       }}
                     >
-                      {camp.category}
+                      {campaign.category}
                     </span>
+
                     <span
                       style={{
                         position: 'absolute',
-                        bottom: '12px',
+                        top: '12px',
                         right: '12px',
-                        background: 'rgba(10, 14, 26, 0.85)',
-                        backdropFilter: 'blur(6px)',
-                        color: 'var(--text-secondary)',
-                        fontSize: '0.75rem',
                         padding: '0.25rem 0.6rem',
-                        borderRadius: 'var(--radius-full)',
+                        borderRadius: 'var(--radius-sm)',
+                        backgroundColor: 'rgba(9, 13, 22, 0.85)',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        color: '#f59e0b',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.3rem',
                       }}
                     >
-                      <Calendar size={12} /> {calculateDaysLeft(camp.deadline)}
+                      <Clock size={12} /> {calculateDaysLeft(campaign.deadline)}
                     </span>
                   </div>
 
+                  {/* Body */}
                   <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
-                      By <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{camp.creator_name}</span>
-                    </p>
-
                     <h3
                       style={{
                         fontSize: '1.15rem',
                         fontWeight: 700,
-                        marginBottom: '0.75rem',
+                        marginBottom: '0.65rem',
                         lineHeight: 1.35,
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
@@ -264,7 +323,7 @@ export const ExploreCampaigns = () => {
                         overflow: 'hidden',
                       }}
                     >
-                      {camp.campaign_title}
+                      {campaign.campaign_title}
                     </h3>
 
                     <p
@@ -279,26 +338,51 @@ export const ExploreCampaigns = () => {
                         overflow: 'hidden',
                       }}
                     >
-                      {camp.campaign_story}
+                      {campaign.campaign_story}
                     </p>
 
+                    <div
+                      style={{
+                        fontSize: '0.78rem',
+                        color: 'var(--text-muted)',
+                        marginBottom: '1rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                      }}
+                    >
+                      <span>Creator:</span>
+                      <strong style={{ color: 'var(--text-primary)' }}>{campaign.creator_name}</strong>
+                    </div>
+
+                    {/* Funding Progress Bar */}
                     <div style={{ marginTop: 'auto' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.45rem' }}>
-                        <span style={{ fontWeight: 700, color: 'var(--accent-cyan)' }}>
-                          {camp.amount_raised || 0} Credits Raised
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          fontSize: '0.825rem',
+                          marginBottom: '0.45rem',
+                        }}
+                      >
+                        <span style={{ fontWeight: 700, color: 'var(--accent-amber)' }}>
+                          {campaign.amount_raised || 0} Credits Raised
                         </span>
-                        <span style={{ color: 'var(--text-muted)' }}>Goal: {camp.funding_goal}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>
+                          {percent}% of {campaign.funding_goal}
+                        </span>
                       </div>
+
                       <div className="progress-bar-bg" style={{ marginBottom: '1.25rem' }}>
                         <div className="progress-bar-fill" style={{ width: `${percent}%` }} />
                       </div>
 
                       <Link
-                        to={`/campaigns/${camp._id}`}
+                        to={`/campaigns/${campaign._id}`}
                         className="btn btn-primary"
                         style={{ width: '100%', justifyContent: 'center' }}
                       >
-                        View Details
+                        View Details &amp; Pledge
                       </Link>
                     </div>
                   </div>

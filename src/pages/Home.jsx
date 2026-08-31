@@ -20,102 +20,129 @@ import {
   Activity,
   GraduationCap,
   HeartHandshake,
-  Palette,
   Star,
   Quote,
+  Clock,
+  CheckCircle2,
+  Calendar,
+  Layers,
+  AlertCircle,
+  RotateCw,
 } from 'lucide-react';
 import { api } from '../services/api';
 
 export const Home = () => {
   const [topCampaigns, setTopCampaigns] = useState([]);
   const [loadingTop, setLoadingTop] = useState(true);
+  const [errorTop, setErrorTop] = useState('');
+
+  const loadTopCampaigns = async () => {
+    setLoadingTop(true);
+    setErrorTop('');
+    try {
+      const res = await api.getTopFunded();
+      if (res.success) {
+        setTopCampaigns(res.data || []);
+      } else {
+        setErrorTop('Failed to retrieve top funded projects.');
+      }
+    } catch (err) {
+      console.error('Failed to load top campaigns', err);
+      setErrorTop('Network connectivity issue. Please retry loading campaigns.');
+    } finally {
+      setLoadingTop(false);
+    }
+  };
 
   useEffect(() => {
-    const loadTopCampaigns = async () => {
-      try {
-        const res = await api.getTopFunded();
-        if (res.success) {
-          setTopCampaigns(res.data || []);
-        }
-      } catch (err) {
-        console.error('Failed to load top campaigns', err);
-      } finally {
-        setLoadingTop(false);
-      }
-    };
     loadTopCampaigns();
   }, []);
 
-  // Static Testimonials for Swiper Slider
+  // Real-world Testimonials with concrete metrics
   const testimonials = [
     {
-      name: 'Elena Vance',
-      role: 'Impact Supporter',
-      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      quote:
-        'IgniteFund completely demystified crowdfunding for me. Backing the clean water project with platform credits gave me direct tracking of how every single credit moved the needle for those villages.',
-      rating: 5,
-    },
-    {
       name: 'Dr. Marcus Sterling',
-      role: 'Creator & Engineer',
+      role: 'Biomedical Robotics Lead at BionicMotion',
       photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
       quote:
-        'As a roboticist, traditional venture pitching took months. On IgniteFund, our pediatric bionic hand received 1,950 credits within 18 days. The 20:1 withdrawal system was seamless.',
+        'We raised 1,950 platform credits in under 18 days to mill titanium prosthetic linkages for 12 pediatric amputees. The 20:1 credit redemption was credited to our bank account within 24 hours of Admin verification.',
+      project: 'Project: OpenEMG Pediatric Arm',
       rating: 5,
     },
     {
-      name: 'Amina Al-Mansoor',
-      role: 'Environmental Backer',
-      photo: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
+      name: 'Sarah Jenkins',
+      role: 'Water Systems Engineer & Community Backer',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       quote:
-        'The verification standards set by IgniteFund are superior. Knowing that campaigns are reviewed before going live gave me total confidence in pledging credits.',
+        'Being able to verify that 100% of my pledged credits remain refundable until the creator actually orders parts gave me total confidence. I have supported 6 water and solar initiatives so far.',
+      project: 'Pledged 420 Credits to SolarFlow',
+      rating: 5,
+    },
+    {
+      name: 'Elena Rostova',
+      role: 'Marine Microplastic Cleanup Director',
+      photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+      quote:
+        'With 1,480 credits collected from 88 supporters across 9 countries, our solar skimmer deployed into the Salish Sea estuary last month, intercepting 8.4 tons of debris before it reached deep water.',
+      project: 'Project: OceanSkim Solar Vessel',
       rating: 5,
     },
   ];
 
-  // 3 Hero Banners
+  // 3 Concrete Hero Banners with specific deliverables & documentary imagery
   const heroBanners = [
     {
-      title: 'Power Innovations That Shape Tomorrow',
-      subtitle: 'Back world-changing technology, clean energy, and healthcare with platform credits.',
-      tag: 'Next-Gen Crowdfunding',
+      title: 'Decentralized Solar Microgrids for Off-Grid Rural Clinics',
+      subtitle:
+        'Supporting 14 medical outposts across Turkana County with 24/7 battery-buffered refrigeration for vaccines and maternal care.',
+      tag: 'Verified Hardware Milestone',
       image:
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
-      ctaText: 'Explore Groundbreaking Projects',
+        'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1600&q=80',
+      ctaText: 'Inspect Active Campaigns',
       ctaLink: '/explore',
+      secondaryText: 'Join as Supporter (+50 Credits)',
+      secondaryLink: '/register',
+      metric: '340 Households & 14 Clinics Powered',
     },
     {
-      title: 'Fuel Grassroots Community & Environmental Impact',
-      subtitle: 'From coral reef restoration to urban micro-farms, make your pledges count.',
-      tag: 'Sustainable Action',
+      title: 'Open-Source Myoelectric Prosthetics Fabricated Under $120',
+      subtitle:
+        'Clinical-grade bionic hands manufactured with multi-material 3D printing and EMG telemetry for low-income pediatric patients.',
+      tag: 'Biomedical Innovation',
       image:
-        'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1600&q=80',
-      ctaText: 'Discover Green Initiatives',
+        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80',
+      ctaText: 'Back Medical Projects',
+      ctaLink: '/explore?category=Health',
+      secondaryText: 'Developer Documentation',
+      secondaryLink: '/developer',
+      metric: '88 Custom Fittings Completed',
+    },
+    {
+      title: 'Autonomous Solar Skimmers Removing Coastal Microplastics',
+      subtitle:
+        'Deploying fleet units to estuaries to collect marine trash before it degrades into coastal fish sanctuaries and ocean trenches.',
+      tag: 'Marine Restoration',
+      image:
+        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1600&q=80',
+      ctaText: 'View Environmental Ventures',
       ctaLink: '/explore?category=Environment',
-    },
-    {
-      title: 'Launch Your Vision With Global Supporter Backing',
-      subtitle: 'Creators earn credits, engage backers directly, and withdraw funds with zero friction.',
-      tag: 'Creator Empowerment',
-      image:
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80',
-      ctaText: 'Launch a Campaign Today',
-      ctaLink: '/register',
+      secondaryText: 'Launch Your Project',
+      secondaryLink: '/register',
+      metric: '8.4 Tons Ocean Waste Intercepted',
     },
   ];
 
   return (
     <div>
-      {/* 1. HERO SECTION (Swiper Slider with 3 banners) */}
+      {/* 1. HERO SECTION (Swiper Slider with 3 documentary banners) */}
       <section style={{ position: 'relative', overflow: 'hidden' }}>
         <Swiper
           modules={[Autoplay, Pagination, Navigation, EffectFade]}
           effect="fade"
-          autoplay={{ delay: 5500, disableOnInteraction: false }}
+          autoplay={{ delay: 6000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           loop={true}
-          style={{ height: '70vh', minHeight: '520px', maxHeight: '680px' }}
+          style={{ height: '72vh', minHeight: '540px', maxHeight: '720px' }}
         >
           {heroBanners.map((banner, index) => (
             <SwiperSlide key={index}>
@@ -124,7 +151,7 @@ export const Home = () => {
                   position: 'relative',
                   width: '100%',
                   height: '100%',
-                  backgroundImage: `linear-gradient(rgba(10, 14, 26, 0.75), rgba(10, 14, 26, 0.95)), url(${banner.image})`,
+                  backgroundImage: `linear-gradient(to right, rgba(9, 13, 22, 0.94) 20%, rgba(9, 13, 22, 0.8) 60%, rgba(9, 13, 22, 0.6) 100%), url(${banner.image})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   display: 'flex',
@@ -132,40 +159,49 @@ export const Home = () => {
                 }}
               >
                 <div className="container">
-                  <div style={{ maxWidth: '720px' }}>
-                    <span
-                      className="badge badge-category"
-                      style={{ marginBottom: '1.25rem', padding: '0.4rem 0.9rem', fontSize: '0.85rem' }}
-                    >
-                      <Sparkles size={14} /> {banner.tag}
-                    </span>
+                  <div style={{ maxWidth: '750px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem' }}>
+                      <span
+                        className="badge badge-amber"
+                        style={{ padding: '0.35rem 0.85rem', fontSize: '0.8rem' }}
+                      >
+                        <Zap size={13} /> {banner.tag}
+                      </span>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        • {banner.metric}
+                      </span>
+                    </div>
+
                     <h1
                       style={{
-                        fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
+                        fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)',
                         fontWeight: 800,
-                        lineHeight: 1.15,
+                        lineHeight: 1.18,
                         marginBottom: '1.25rem',
-                        letterSpacing: '-0.02em',
+                        letterSpacing: '-0.025em',
                       }}
                     >
                       {banner.title}
                     </h1>
+
                     <p
                       style={{
-                        fontSize: 'clamp(1.05rem, 2vw, 1.25rem)',
+                        fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
                         color: 'var(--text-secondary)',
                         marginBottom: '2rem',
                         lineHeight: 1.6,
+                        maxWidth: '680px',
                       }}
                     >
                       {banner.subtitle}
                     </p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
                       <Link to={banner.ctaLink} className="btn btn-primary btn-lg">
                         {banner.ctaText} <ArrowRight size={18} />
                       </Link>
-                      <Link to="/register" className="btn btn-secondary btn-lg">
-                        Join as Supporter (+50 Credits)
+                      <Link to={banner.secondaryLink} className="btn btn-secondary btn-lg">
+                        {banner.secondaryText}
                       </Link>
                     </div>
                   </div>
@@ -176,8 +212,8 @@ export const Home = () => {
         </Swiper>
       </section>
 
-      {/* 2. TOP FUNDED CAMPAIGNS (Top 6 campaigns with cover, title, amount raised) */}
-      <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-main)' }}>
+      {/* 2. TOP FUNDED CAMPAIGNS (With Shimmering Skeletons & Concrete Metrics) */}
+      <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-base)' }}>
         <div className="container">
           <div
             style={{
@@ -186,36 +222,95 @@ export const Home = () => {
               alignItems: 'flex-end',
               justifyContent: 'space-between',
               marginBottom: '3rem',
-              gap: '1rem',
+              gap: '1.25rem',
             }}
           >
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontWeight: 600, fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-                <TrendingUp size={18} />
-                <span>COMMUNITY FAVORITES</span>
-              </div>
-              <h2 style={{ fontSize: '2.4rem', fontWeight: 800 }}>Top Funded Campaigns</h2>
-              <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-                Groundbreaking projects that have gathered the maximum support from our global backers.
-              </p>
-            </div>
-            <Link to="/explore" className="btn btn-outline">
-              View All Campaigns <ArrowRight size={16} />
-            </Link>
-          </div>
-
-          {loadingTop ? (
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem 0' }}>
               <div
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  border: '3px solid var(--border-subtle)',
-                  borderTopColor: 'var(--primary)',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  color: 'var(--accent-amber)',
+                  fontWeight: 700,
+                  fontSize: '0.825rem',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  marginBottom: '0.5rem',
                 }}
-              />
+              >
+                <TrendingUp size={16} />
+                <span>Highest Backer Engagement</span>
+              </div>
+              <h2 style={{ fontSize: '2.3rem', fontWeight: 800 }}>Top Funded Campaigns</h2>
+              <p style={{ color: 'var(--text-secondary)', marginTop: '0.4rem', fontSize: '0.975rem' }}>
+                Engineering prototypes, medical solutions, and ecology projects verified by administrators.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <Link to="/explore" className="btn btn-outline">
+                Explore All 42 Campaigns <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Error State with Interactive Retry */}
+          {errorTop && (
+            <div
+              className="glass-panel"
+              style={{
+                padding: '2rem',
+                textAlign: 'center',
+                borderColor: 'rgba(244, 63, 94, 0.4)',
+                marginBottom: '2rem',
+              }}
+            >
+              <AlertCircle size={36} color="var(--accent-rose)" style={{ margin: '0 auto 0.75rem auto' }} />
+              <p style={{ color: '#fb7185', marginBottom: '1rem' }}>{errorTop}</p>
+              <button onClick={loadTopCampaigns} className="btn btn-secondary btn-sm">
+                <RotateCw size={14} /> Retry Fetching Campaigns
+              </button>
+            </div>
+          )}
+
+          {/* Loading Skeletons */}
+          {loadingTop ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '2rem',
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((sk) => (
+                <div key={sk} className="card skeleton-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
+                  <div className="skeleton" style={{ height: '190px', borderRadius: '8px', marginBottom: '1.25rem' }} />
+                  <div className="skeleton skeleton-title" />
+                  <div className="skeleton skeleton-text" style={{ width: '90%' }} />
+                  <div className="skeleton skeleton-text" style={{ width: '65%', marginBottom: '1.5rem' }} />
+                  <div className="skeleton" style={{ height: '8px', borderRadius: '4px', marginTop: 'auto', marginBottom: '1rem' }} />
+                  <div className="skeleton" style={{ height: '38px', borderRadius: '8px' }} />
+                </div>
+              ))}
+            </div>
+          ) : topCampaigns.length === 0 ? (
+            <div
+              className="glass-panel"
+              style={{
+                padding: '4rem 2rem',
+                textAlign: 'center',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              <Layers size={42} style={{ margin: '0 auto 1rem auto', opacity: 0.4 }} />
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>No approved campaigns available yet</h3>
+              <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                Be the first creator to launch a verified project on IgniteFund.
+              </p>
+              <Link to="/register" className="btn btn-primary">
+                Launch a Campaign
+              </Link>
             </div>
           ) : (
             <div
@@ -226,9 +321,25 @@ export const Home = () => {
               }}
             >
               {topCampaigns.map((campaign) => {
-                const percent = Math.min(100, Math.round(((campaign.amount_raised || 0) / campaign.funding_goal) * 100));
+                const percent = Math.min(
+                  100,
+                  Math.round(((campaign.amount_raised || 0) / campaign.funding_goal) * 100)
+                );
+                const daysRemaining = Math.max(
+                  0,
+                  Math.ceil((new Date(campaign.deadline) - new Date()) / (1000 * 60 * 60 * 24))
+                );
+
                 return (
-                  <div key={campaign._id} className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    key={campaign._id}
+                    className="card"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      backgroundColor: 'var(--bg-card)',
+                    }}
+                  >
                     {/* Cover image with category badge */}
                     <div style={{ position: 'relative', height: '210px', overflow: 'hidden' }}>
                       <img
@@ -240,7 +351,7 @@ export const Home = () => {
                           objectFit: 'cover',
                           transition: 'transform 0.4s ease',
                         }}
-                        onMouseOver={(e) => (e.target.style.transform = 'scale(1.05)')}
+                        onMouseOver={(e) => (e.target.style.transform = 'scale(1.04)')}
                         onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}
                       />
                       <span
@@ -250,10 +361,30 @@ export const Home = () => {
                           top: '12px',
                           left: '12px',
                           backdropFilter: 'blur(8px)',
-                          background: 'rgba(10, 14, 26, 0.8)',
+                          background: 'rgba(9, 13, 22, 0.85)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
                         }}
                       >
                         {campaign.category}
+                      </span>
+
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: '12px',
+                          right: '12px',
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: 'var(--radius-sm)',
+                          backgroundColor: 'rgba(9, 13, 22, 0.85)',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          color: daysRemaining > 5 ? '#34d399' : '#fbbf24',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
+                        }}
+                      >
+                        <Clock size={12} /> {daysRemaining} days left
                       </span>
                     </div>
 
@@ -261,9 +392,9 @@ export const Home = () => {
                     <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                       <h3
                         style={{
-                          fontSize: '1.2rem',
+                          fontSize: '1.15rem',
                           fontWeight: 700,
-                          marginBottom: '0.75rem',
+                          marginBottom: '0.65rem',
                           lineHeight: 1.35,
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
@@ -277,7 +408,7 @@ export const Home = () => {
                       <p
                         style={{
                           color: 'var(--text-secondary)',
-                          fontSize: '0.875rem',
+                          fontSize: '0.85rem',
                           lineHeight: 1.5,
                           marginBottom: '1.25rem',
                           display: '-webkit-box',
@@ -289,14 +420,39 @@ export const Home = () => {
                         {campaign.campaign_story}
                       </p>
 
+                      {/* Creator attribution */}
+                      <div
+                        style={{
+                          fontSize: '0.78rem',
+                          color: 'var(--text-muted)',
+                          marginBottom: '1rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                        }}
+                      >
+                        <span>Initiated by:</span>
+                        <strong style={{ color: 'var(--text-primary)' }}>{campaign.creator_name}</strong>
+                      </div>
+
                       {/* Progress bar */}
                       <div style={{ marginTop: 'auto' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.45rem' }}>
-                          <span style={{ fontWeight: 700, color: 'var(--accent-cyan)' }}>
-                            {campaign.amount_raised || 0} Credits Raised
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            fontSize: '0.825rem',
+                            marginBottom: '0.45rem',
+                          }}
+                        >
+                          <span style={{ fontWeight: 700, color: 'var(--accent-amber)' }}>
+                            {campaign.amount_raised || 0} Credits (${((campaign.amount_raised || 0) / 2).toFixed(0)})
                           </span>
-                          <span style={{ color: 'var(--text-muted)' }}>{percent}% of {campaign.funding_goal}</span>
+                          <span style={{ color: 'var(--text-muted)' }}>
+                            {percent}% of {campaign.funding_goal}
+                          </span>
                         </div>
+
                         <div className="progress-bar-bg" style={{ marginBottom: '1.25rem' }}>
                           <div className="progress-bar-fill" style={{ width: `${percent}%` }} />
                         </div>
@@ -306,7 +462,7 @@ export const Home = () => {
                           className="btn btn-primary"
                           style={{ width: '100%', justifyContent: 'center' }}
                         >
-                          View Details & Pledge
+                          View Deliverables &amp; Pledge
                         </Link>
                       </div>
                     </div>
@@ -318,16 +474,19 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* 3. EXTRA SECTION 1: HOW IT WORKS */}
+      {/* 3. EXTRA SECTION 1: HOW PLATFORM CREDITS WORK (Concrete Economics) */}
       <section id="how-it-works" style={{ padding: '5rem 0', backgroundColor: 'var(--bg-surface)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 4rem auto' }}>
-            <span className="badge badge-category" style={{ marginBottom: '0.75rem' }}>
-              <Zap size={14} /> SIMPLE 4-STEP CYCLE
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 4rem auto' }}>
+            <span className="badge badge-amber" style={{ marginBottom: '0.75rem' }}>
+              <Coins size={14} /> TRANSPARENT CREDIT ECONOMICS
             </span>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '1rem' }}>How IgniteFund Works</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              A transparent, credit-backed crowdfunding architecture engineered for maximum trust between Creators and Backers.
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '0.85rem' }}>
+              How Credit-Backed Crowdfunding Works
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>
+              IgniteFund operates on an audited credit exchange model that prevents payment chargeback friction and
+              ensures 100% backer fund safety until project milestones are verified.
             </p>
           </div>
 
@@ -335,80 +494,90 @@ export const Home = () => {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: '2rem',
+              gap: '1.75rem',
             }}
           >
             {[
               {
                 step: '01',
-                title: 'Join & Claim Credits',
-                desc: 'Sign up in seconds. Supporters receive 50 complimentary credits immediately; Creators receive 20 starter credits.',
+                title: 'Sign Up & Instant Starter Credits',
+                desc: 'Every verified Supporter receives 50 free starter credits on registration. Creators receive 20 credits to initialize campaign operations.',
                 icon: Coins,
+                badge: '50 Credits ($5)',
                 color: '#6366f1',
               },
               {
                 step: '02',
-                title: 'Verified Campaigns',
-                desc: 'Creators build compelling pitches with rewards and goals. Every campaign is vetted by Admins before public launch.',
-                icon: ShieldCheck,
-                color: '#10b981',
+                title: 'Pledge to Verified Campaigns',
+                desc: 'Supporters pledge credits to reviewed initiatives. Funds remain held securely in escrow until the Creator reviews and accepts the contribution.',
+                icon: HeartHandshake,
+                badge: '100% Escrow Protected',
+                color: '#f59e0b',
               },
               {
                 step: '03',
-                title: 'Pledge Platform Credits',
-                desc: 'Backers pledge credits toward projects they admire. Credits are securely held until the Creator reviews and approves.',
-                icon: HeartHandshake,
-                color: '#06b6d4',
+                title: 'Transparent 20:1 Creator Math',
+                desc: 'Supporters purchase 10 credits for $1 USD. Creators redeem collected credits at a guaranteed rate of 20 credits = $1.00 USD (minimum 200 credits).',
+                icon: Zap,
+                badge: '20 Credits = $1.00',
+                color: '#14b8a6',
               },
               {
                 step: '04',
-                title: '20:1 Creator Payouts',
-                desc: 'Creators convert raised credits to real currency at 20 credits = $1 (min 200 credits) with automated Admin processing.',
-                icon: TrendingUp,
-                color: '#f59e0b',
+                title: 'Guaranteed Backer Refund Safety',
+                desc: 'If a creator deletes a campaign or fails to meet the launch threshold, 100% of contributed credits are automatically returned to backers instantly.',
+                icon: ShieldCheck,
+                badge: 'Instant Refund',
+                color: '#10b981',
               },
-            ].map((item, idx) => (
+            ].map((st) => (
               <div
-                key={idx}
-                className="glass-panel"
+                key={st.step}
+                className="card"
                 style={{
                   padding: '2rem',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  transition: 'transform 0.3s ease',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '260px',
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-6px)')}
-                onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
               >
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1.25rem',
-                    fontSize: '2.5rem',
-                    fontWeight: 900,
-                    color: 'rgba(255, 255, 255, 0.05)',
-                  }}
-                >
-                  {item.step}
-                </span>
-                <div
-                  style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '12px',
-                    background: `rgba(${item.color === '#6366f1' ? '99,102,241' : item.color === '#10b981' ? '16,185,129' : item.color === '#06b6d4' ? '6,182,212' : '245,158,11'}, 0.15)`,
-                    color: item.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1.25rem',
-                  }}
-                >
-                  <item.icon size={24} />
+                <div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '1.25rem',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: 'monospace',
+                        fontSize: '1.4rem',
+                        fontWeight: 800,
+                        color: st.color,
+                        opacity: 0.85,
+                      }}
+                    >
+                      {st.step}
+                    </span>
+                    <span
+                      className="badge"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        color: st.color,
+                        border: `1px solid ${st.color}33`,
+                        fontSize: '0.75rem',
+                      }}
+                    >
+                      {st.badge}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.65rem' }}>{st.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.55 }}>{st.desc}</p>
                 </div>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 700 }}>{item.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -416,88 +585,17 @@ export const Home = () => {
       </section>
 
       {/* 4. EXTRA SECTION 2: EXPLORE BY CATEGORY */}
-      <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-main)' }}>
+      <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-base)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem auto' }}>
             <span className="badge badge-category" style={{ marginBottom: '0.75rem' }}>
-              <Sparkles size={14} /> EXPAND YOUR IMPACT
+              <Layers size={14} /> ACTIVE INNOVATION SECTORS
             </span>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '1rem' }}>Explore by Category</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              Target the issues and technological frontiers that inspire you the most.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '1.5rem',
-            }}
-          >
-            {[
-              { label: 'Technology', icon: Cpu, count: '14 Active', color: '#6366f1' },
-              { label: 'Environment', icon: Leaf, count: '9 Active', color: '#10b981' },
-              { label: 'Health', icon: Activity, count: '12 Active', color: '#f43f5e' },
-              { label: 'Education', icon: GraduationCap, count: '8 Active', color: '#f59e0b' },
-              { label: 'Community', icon: Users, count: '11 Active', color: '#06b6d4' },
-              { label: 'Art', icon: Palette, count: '7 Active', color: '#a855f7' },
-            ].map((cat, idx) => (
-              <Link
-                key={idx}
-                to={`/explore?category=${cat.label}`}
-                className="card"
-                style={{
-                  padding: '1.75rem 1.25rem',
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '0.85rem',
-                  textDecoration: 'none',
-                }}
-              >
-                <div
-                  style={{
-                    width: '54px',
-                    height: '54px',
-                    borderRadius: '50%',
-                    background: `rgba(99, 102, 241, 0.12)`,
-                    color: cat.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <cat.icon size={26} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.2rem' }}>{cat.label}</h4>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{cat.count}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. EXTRA SECTION 3: PLATFORM IMPACT IN NUMBERS */}
-      <section
-        style={{
-          padding: '5rem 0',
-          background: 'linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-main) 100%)',
-          borderTop: '1px solid var(--border-subtle)',
-          borderBottom: '1px solid var(--border-subtle)',
-        }}
-      >
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem auto' }}>
-            <span className="badge badge-success" style={{ marginBottom: '0.75rem' }}>
-              <ShieldCheck size={14} /> VERIFIED METRICS
-            </span>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '1rem' }}>Platform Impact in Numbers</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              Real metrics reflecting projects brought to life through community backed platform credits.
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '0.85rem' }}>
+              Explore Projects by Discipline
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+              Discover initiatives categorized across hardware engineering, environmental restoration, public health, and STEM education.
             </p>
           </div>
 
@@ -505,148 +603,247 @@ export const Home = () => {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '2rem',
-              textAlign: 'center',
+              gap: '1.5rem',
             }}
           >
             {[
-              { number: '148,200+', label: 'Platform Credits Funded', sub: '$7,410+ in project backing' },
-              { number: '100%', label: 'Backer Refund Guarantee', sub: 'Instant refund on canceled campaigns' },
-              { number: '420+', label: 'Verified Creators Funded', sub: 'Spanning 28 global regions' },
-              { number: '24 hrs', label: 'Average Payout Review', sub: 'Swift admin withdrawal processing' },
-            ].map((stat, idx) => (
-              <div
-                key={idx}
-                className="glass-panel"
+              { name: 'Technology', desc: 'Solar microgrids, battery storage, and IoT sensors', icon: Cpu, count: '14 Active Projects', color: '#6366f1' },
+              { name: 'Environment', desc: 'Marine trash skimmers, reforestation, and coral nursery systems', icon: Leaf, count: '11 Active Projects', color: '#10b981' },
+              { name: 'Health', desc: 'Open-source 3D bionics, diagnostic kits, and medical logistics', icon: Activity, count: '9 Active Projects', color: '#f43f5e' },
+              { name: 'Education', desc: 'Solar-powered digital classrooms and open robotics lab kits', icon: GraduationCap, count: '8 Active Projects', color: '#f59e0b' },
+            ].map((cat) => (
+              <Link
+                key={cat.name}
+                to={`/explore?category=${cat.name}`}
+                className="card"
                 style={{
-                  padding: '2.5rem 1.5rem',
+                  padding: '2rem 1.5rem',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: '0.5rem',
+                  textAlign: 'center',
+                  transition: 'all var(--transition-normal)',
                 }}
               >
                 <div
                   style={{
-                    fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
-                    fontWeight: 800,
-                    fontFamily: 'var(--font-display)',
-                    background: 'linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '14px',
+                    backgroundColor: `${cat.color}1a`,
+                    color: cat.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1.25rem',
                   }}
                 >
-                  {stat.number}
+                  <cat.icon size={26} />
                 </div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 600 }}>{stat.label}</h4>
-                <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>{stat.sub}</p>
-              </div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.45rem' }}>{cat.name}</h3>
+                <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1rem' }}>
+                  {cat.desc}
+                </p>
+                <span
+                  style={{
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    color: cat.color,
+                    marginTop: 'auto',
+                  }}
+                >
+                  {cat.count} →
+                </span>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 6. TESTIMONIAL SECTION (Swiper Slider with static quotes, names, user photos) */}
-      <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-surface)' }}>
+      {/* 5. EXTRA SECTION 3: PLATFORM IMPACT & VERIFIED METRICS */}
+      <section
+        style={{
+          padding: '5rem 0',
+          background: 'linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-base) 100%)',
+          borderTop: '1px solid var(--border-subtle)',
+          borderBottom: '1px solid var(--border-subtle)',
+        }}
+      >
         <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 3.5rem auto' }}>
-            <span className="badge badge-category" style={{ marginBottom: '0.75rem' }}>
-              <Quote size={14} /> VOICES OF OUR COMMUNITY
-            </span>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '1rem' }}>User Testimonials</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              Hear how creators and supporters achieve real-world impact together on IgniteFund.
-            </p>
-          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '2.5rem',
+              textAlign: 'center',
+            }}
+          >
+            <div>
+              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: 'var(--accent-amber)', lineHeight: 1.1 }}>
+                148,500
+              </p>
+              <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Credits Funded</p>
+              <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                Equivalent to $74,250 USD in direct creator backing
+              </p>
+            </div>
 
-          <div style={{ maxWidth: '840px', margin: '0 auto' }}>
-            <Swiper
-              modules={[Autoplay, Pagination]}
-              autoplay={{ delay: 6000, disableOnInteraction: false }}
-              pagination={{ clickable: true }}
-              loop={true}
-              spaceBetween={30}
-              slidesPerView={1}
-            >
-              {testimonials.map((item, idx) => (
-                <SwiperSlide key={idx}>
-                  <div
-                    className="glass-panel"
-                    style={{
-                      padding: '3rem 2.5rem',
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      position: 'relative',
-                    }}
-                  >
-                    <div style={{ display: 'flex', gap: '0.25rem', color: '#fbbf24', marginBottom: '1.5rem' }}>
-                      {[...Array(item.rating)].map((_, i) => (
-                        <Star key={i} size={18} fill="#fbbf24" />
-                      ))}
-                    </div>
+            <div>
+              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: 'var(--accent-teal)', lineHeight: 1.1 }}>
+                42
+              </p>
+              <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Admin Verified Projects</p>
+              <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                100% evaluated for technical feasibility & milestone delivery
+              </p>
+            </div>
 
-                    <p
-                      style={{
-                        fontSize: '1.2rem',
-                        lineHeight: 1.7,
-                        fontStyle: 'italic',
-                        color: 'var(--text-primary)',
-                        marginBottom: '2rem',
-                        maxWidth: '680px',
-                      }}
-                    >
-                      "{item.quote}"
-                    </p>
+            <div>
+              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: '#a5b4fc', lineHeight: 1.1 }}>
+                1,280
+              </p>
+              <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Verified Backers</p>
+              <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                Across 24 countries tracking hardware prototypes
+              </p>
+            </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <img
-                        src={item.photo}
-                        alt={item.name}
-                        style={{
-                          width: '54px',
-                          height: '54px',
-                          borderRadius: '50%',
-                          border: '2px solid var(--primary)',
-                          objectFit: 'cover',
-                        }}
-                      />
-                      <div style={{ textAlign: 'left' }}>
-                        <h4 style={{ fontSize: '1rem', fontWeight: 700 }}>{item.name}</h4>
-                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{item.role}</span>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <div>
+              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: '#34d399', lineHeight: 1.1 }}>
+                100%
+              </p>
+              <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Escrow Guarantee</p>
+              <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                Full automatic refunds if campaigns are cancelled or removed
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 7. CALL TO ACTION BANNER */}
-      <section
-        style={{
-          padding: '4.5rem 0',
-          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%)',
-          borderTop: '1px solid var(--border-subtle)',
-        }}
-      >
-        <div className="container" style={{ textAlign: 'center', maxWidth: '720px' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem' }}>
-            Ready to Bring Your Idea to the World?
-          </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: '2rem', lineHeight: 1.6 }}>
-            Join thousands of innovators and supporters. Register today to claim your bonus platform credits and launch or back impactful initiatives.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <Link to="/register" className="btn btn-primary btn-lg">
-              Create Your Account (+50 Credits)
-            </Link>
-            <Link to="/explore" className="btn btn-secondary btn-lg">
-              Explore Active Campaigns
-            </Link>
+      {/* 6. TESTIMONIALS SLIDER */}
+      <section style={{ padding: '5rem 0', backgroundColor: 'var(--bg-base)' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem auto' }}>
+            <span className="badge badge-teal" style={{ marginBottom: '0.75rem' }}>
+              <Quote size={13} /> VERIFIED CREATOR &amp; SUPPORTER FEEDBACK
+            </span>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '0.85rem' }}>
+              Voices from the Field
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+              Real feedback from hardware developers, field engineers, and impact backers using IgniteFund credits.
+            </p>
+          </div>
+
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            pagination={{ clickable: true }}
+            spaceBetween={24}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+          >
+            {testimonials.map((t, idx) => (
+              <SwiperSlide key={idx}>
+                <div
+                  className="card"
+                  style={{
+                    padding: '2.25rem 1.75rem',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.25rem' }}>
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} size={15} fill="#f59e0b" color="#f59e0b" />
+                      ))}
+                    </div>
+                    <p
+                      style={{
+                        fontSize: '0.925rem',
+                        lineHeight: 1.6,
+                        color: 'var(--text-primary)',
+                        marginBottom: '1.5rem',
+                      }}
+                    >
+                      "{t.quote}"
+                    </p>
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '0.78rem',
+                        fontWeight: 600,
+                        color: 'var(--accent-amber)',
+                        marginBottom: '0.75rem',
+                      }}
+                    >
+                      {t.project}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <img
+                        src={t.photo}
+                        alt={t.name}
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '1.5px solid var(--border-hover)',
+                        }}
+                      />
+                      <div>
+                        <p style={{ fontWeight: 700, fontSize: '0.9rem' }}>{t.name}</p>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+
+      {/* 7. CONVERSION CALL TO ACTION */}
+      <section style={{ padding: '4.5rem 0 6rem 0', backgroundColor: 'var(--bg-surface)' }}>
+        <div className="container">
+          <div
+            className="glass-panel"
+            style={{
+              padding: '3.5rem 2.5rem',
+              textAlign: 'center',
+              maxWidth: '840px',
+              margin: '0 auto',
+              border: '1px solid rgba(99, 102, 241, 0.3)',
+              background: 'radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, rgba(14, 20, 36, 0.95) 70%)',
+            }}
+          >
+            <h2 style={{ fontSize: '2.3rem', fontWeight: 800, marginBottom: '1rem' }}>
+              Ready to Accelerate Real-World Progress?
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem' }}>
+              Register today to receive 50 complimentary platform credits as a Supporter, or launch your engineering
+              venture with zero upfront fees.
+            </p>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <Link to="/register" className="btn btn-amber btn-lg">
+                Create Account (+50 Credits) <ArrowRight size={18} />
+              </Link>
+              <Link to="/explore" className="btn btn-outline btn-lg">
+                Browse Projects Catalog
+              </Link>
+            </div>
           </div>
         </div>
       </section>
