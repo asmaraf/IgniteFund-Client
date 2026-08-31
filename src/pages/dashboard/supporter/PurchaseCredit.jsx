@@ -165,42 +165,25 @@ export const PurchaseCredit = () => {
             key={pkg.credits}
             className="card"
             style={{
-              padding: '2rem',
+              padding: '1.75rem',
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
               borderColor: pkg.highlight ? 'var(--primary)' : 'var(--border-subtle)',
-              boxShadow: pkg.highlight ? '0 0 25px rgba(99, 102, 241, 0.25)' : 'none',
+              borderWidth: pkg.highlight ? '2px' : '1px',
+              borderStyle: 'solid',
+              boxShadow: pkg.highlight ? '0 0 24px rgba(99, 102, 241, 0.2)' : 'none',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
             }}
           >
-            {pkg.highlight && (
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '-12px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: 'var(--primary)',
-                  color: '#ffffff',
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  padding: '0.25rem 0.8rem',
-                  borderRadius: 'var(--radius-full)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                }}
-              >
-                MOST POPULAR
-              </span>
-            )}
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem' }}>
+            {/* Top row: Icon and Popular Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
               <div
                 style={{
                   width: '42px',
                   height: '42px',
                   borderRadius: '10px',
-                  background: 'rgba(99, 102, 241, 0.15)',
+                  background: pkg.highlight ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.12)',
                   color: 'var(--primary)',
                   display: 'flex',
                   alignItems: 'center',
@@ -209,14 +192,36 @@ export const PurchaseCredit = () => {
               >
                 <pkg.icon size={22} />
               </div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800 }}>{pkg.credits} Credits</h3>
+
+              {pkg.highlight && (
+                <span
+                  style={{
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    border: '1px solid var(--primary)',
+                    color: '#c7d2fe',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    padding: '0.28rem 0.75rem',
+                    borderRadius: 'var(--radius-full)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                  }}
+                >
+                  <Sparkles size={12} /> Most Popular
+                </span>
+              )}
             </div>
 
-            <div style={{ marginBottom: '1.25rem' }}>
-              <span style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '0.75rem' }}>{pkg.credits} Credits</h3>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <span style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1 }}>
                 ${pkg.price}
               </span>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginLeft: '0.35rem' }}>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginLeft: '0.4rem' }}>
                 USD
               </span>
             </div>
@@ -227,15 +232,17 @@ export const PurchaseCredit = () => {
                 fontSize: '0.825rem',
                 fontWeight: 600,
                 marginBottom: '1.75rem',
-                minHeight: '2.5rem',
+                minHeight: '2.25rem',
+                lineHeight: 1.4,
               }}
             >
               {pkg.bonus}
             </p>
 
+            {/* Standard uniform button across all cards */}
             <button
               onClick={() => handleSelectPackage(pkg)}
-              className={`btn ${pkg.highlight ? 'btn-primary' : 'btn-secondary'}`}
+              className="btn btn-secondary"
               style={{ width: '100%', marginTop: 'auto', justifyContent: 'center' }}
             >
               <CreditCard size={16} /> Select Package
