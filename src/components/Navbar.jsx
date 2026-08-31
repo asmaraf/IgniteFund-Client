@@ -10,6 +10,8 @@ import {
   Menu,
   X,
   User as UserIcon,
+  Code,
+  ShieldCheck,
 } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
@@ -20,7 +22,7 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const clientRepoUrl =
-    import.meta.env.VITE_GITHUB_CLIENT_REPO || 'https://github.com/developer/crowdfunding-client';
+    import.meta.env.VITE_GITHUB_CLIENT_REPO || 'https://github.com/developer/crowdfunding-platform-client';
 
   const handleLogout = () => {
     logout();
@@ -36,25 +38,77 @@ export const Navbar = () => {
   };
 
   return (
-    <nav
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 900,
-        backgroundColor: 'rgba(10, 14, 26, 0.85)',
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border-subtle)',
-      }}
-    >
+    <>
+      {/* Top Social-Proof & Live Platform Ticker */}
       <div
-        className="container"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '72px',
+          background: 'rgba(14, 20, 36, 0.95)',
+          borderBottom: '1px solid var(--border-subtle)',
+          padding: '0.35rem 0',
+          fontSize: '0.78rem',
+          color: 'var(--text-muted)',
+        }}
+        className="top-trust-bar"
+      >
+        <div
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+            <span>
+              <strong style={{ color: '#f59e0b' }}>148,500 Credits</strong> ($74,250) Pledged
+            </span>
+            <span style={{ opacity: 0.35 }}>•</span>
+            <span>
+              <strong style={{ color: '#14b8a6' }}>42</strong> Verified Projects
+            </span>
+            <span style={{ opacity: 0.35 }}>•</span>
+            <span>
+              <strong style={{ color: '#a5b4fc' }}>1,280</strong> Active Backers
+            </span>
+          </div>
+
+          <Link
+            to="/developer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              color: '#a5b4fc',
+              fontWeight: 500,
+              fontSize: '0.76rem',
+            }}
+          >
+            <Code size={13} /> Developer Portal &amp; API Specs
+          </Link>
+        </div>
+      </div>
+
+      <nav
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 900,
+          backgroundColor: 'rgba(9, 13, 22, 0.88)',
+          backdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--border-subtle)',
         }}
       >
+        <div
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '70px',
+          }}
+        >
         {/* Brand / Logo */}
         <Link
           to="/"
@@ -314,6 +368,7 @@ export const Navbar = () => {
           .mobile-menu-btn { display: none !important; }
         }
       `}</style>
-    </nav>
+      </nav>
+    </>
   );
 };
