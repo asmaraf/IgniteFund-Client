@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, LogIn, AlertCircle, Sparkles, Shield, User, Compass } from 'lucide-react';
+import { Mail, Lock, LogIn, AlertCircle, Sparkles } from 'lucide-react';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -72,8 +72,8 @@ export const Login = () => {
           redirectToDashboard(res.user.role);
         }
       } catch (err) {
-        console.error('Google login processing failed:', err);
-        setError(err.message || 'Failed to authenticate with Google account.');
+        console.error('Google Auth Failed', err);
+        setError(err.message || 'Failed to authenticate with Google');
       } finally {
         setLoading(false);
       }
@@ -87,24 +87,6 @@ export const Login = () => {
   const handleGoogleSignIn = () => {
     setError('');
     triggerGoogleLogin();
-  };
-
-  // 1-Click Quick Demo logins for instant assessor grading
-  const handleQuickLogin = async (demoEmail, demoPass) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError('');
-    setLoading(true);
-    try {
-      const res = await login(demoEmail, demoPass);
-      if (res.success) {
-        redirectToDashboard(res.user.role);
-      }
-    } catch (err) {
-      setError(err.message || 'Quick login failed');
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -276,47 +258,6 @@ export const Login = () => {
           </svg>
           Google Sign-In
         </button>
-
-        {/* 1-Click Quick Demo Logins */}
-        <div
-          style={{
-            marginTop: '2rem',
-            padding: '1rem',
-            backgroundColor: 'var(--bg-input)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-subtle)',
-          }}
-        >
-          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.65rem' }}>
-            ⚡ QUICK DEMO CREDENTIALS (1-CLICK TEST)
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin@ignitefund.com', 'Admin@123456')}
-              className="btn btn-secondary btn-sm"
-              style={{ fontSize: '0.75rem', padding: '0.4rem 0.2rem' }}
-            >
-              <Shield size={12} color="var(--accent-rose)" /> Admin
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('creator@ignitefund.com', 'Creator@123456')}
-              className="btn btn-secondary btn-sm"
-              style={{ fontSize: '0.75rem', padding: '0.4rem 0.2rem' }}
-            >
-              <Compass size={12} color="var(--primary)" /> Creator
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('supporter@ignitefund.com', 'Supporter@123456')}
-              className="btn btn-secondary btn-sm"
-              style={{ fontSize: '0.75rem', padding: '0.4rem 0.2rem' }}
-            >
-              <User size={12} color="var(--accent-emerald)" /> Supporter
-            </button>
-          </div>
-        </div>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
           Don't have an account?{' '}
