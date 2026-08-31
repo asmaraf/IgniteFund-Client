@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, LogIn, AlertCircle, Sparkles, Shield, User, Compass } from 'lucide-react';
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 export const Login = () => {
@@ -29,8 +31,8 @@ export const Login = () => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password) {
-      setError('Please enter both email and password');
+    if (!email.trim() || !password) {
+      setError('Please provide both email and password.');
       return;
     }
 
@@ -47,26 +49,44 @@ export const Login = () => {
     }
   };
 
-  // Google Sign-In Quick Authentication
-  const handleGoogleSignIn = async () => {
-    setError('');
-    setLoading(true);
-    try {
-      const randomGoogleUser = {
-        name: 'Alex Rivera',
-        email: 'alex.rivera.google@example.com',
-        photo_url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-        role: 'Supporter',
-      };
-      const res = await googleLogin(randomGoogleUser);
-      if (res.success) {
-        redirectToDashboard(res.user.role);
+  // Real Google Sign-In with Google Identity Services Popup
+  const triggerGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setLoading(true);
+      setError('');
+      try {
+        // Fetch verified user profile from Google's UserInfo API
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+
+        const googleUserPayload = {
+          name: userInfo.data.name || 'Google User',
+          email: userInfo.data.email,
+          photo_url: userInfo.data.picture,
+          role: 'Supporter',
+        };
+
+        const res = await googleLogin(googleUserPayload);
+        if (res.success) {
+          redirectToDashboard(res.user.role);
+        }
+      } catch (err) {
+        console.error('Google login processing failed:', err);
+        setError(err.message || 'Failed to authenticate with Google account.');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err.message || 'Google sign-in failed');
-    } finally {
-      setLoading(false);
-    }
+    },
+    onError: (errorResponse) => {
+      console.error('Google Popup Error:', errorResponse);
+      setError('Google Sign-In was cancelled or closed.');
+    },
+  });
+
+  const handleGoogleSignIn = () => {
+    setError('');
+    triggerGoogleLogin();
   };
 
   // 1-Click Quick Demo logins for instant assessor grading
