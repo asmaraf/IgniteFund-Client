@@ -272,6 +272,10 @@ export const ExploreCampaigns = () => {
                         objectFit: 'cover',
                         transition: 'transform 0.4s ease',
                       }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=800&q=80';
+                      }}
                       onMouseOver={(e) => (e.target.style.transform = 'scale(1.04)')}
                       onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}
                     />

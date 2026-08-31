@@ -145,7 +145,7 @@ export const Home = () => {
         'Supporting 14 medical outposts across Turkana County with 24/7 battery-buffered refrigeration for vaccines and maternal care.',
       tag: 'Verified Hardware Milestone',
       image:
-        'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1600&q=80',
+        'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1600&q=80',
       ctaText: 'Inspect Active Campaigns',
       ctaLink: '/explore',
       secondaryText: 'Join as Supporter (+50 Credits)',
@@ -199,7 +199,7 @@ export const Home = () => {
                   position: 'relative',
                   width: '100%',
                   height: '100%',
-                  backgroundImage: `linear-gradient(to right, rgba(9, 13, 22, 0.94) 20%, rgba(9, 13, 22, 0.8) 60%, rgba(9, 13, 22, 0.6) 100%), url(${banner.image})`,
+                  backgroundImage: `linear-gradient(to right, rgba(9, 13, 22, 0.84) 15%, rgba(9, 13, 22, 0.55) 55%, rgba(9, 13, 22, 0.3) 100%), url(${banner.image})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   display: 'flex',
@@ -403,6 +403,10 @@ export const Home = () => {
                           height: '100%',
                           objectFit: 'cover',
                           transition: 'transform 0.4s ease',
+                        }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=800&q=80';
                         }}
                         onMouseOver={(e) => (e.target.style.transform = 'scale(1.04)')}
                         onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}

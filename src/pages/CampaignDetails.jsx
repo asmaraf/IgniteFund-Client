@@ -222,6 +222,10 @@ export const CampaignDetails = () => {
             <img
               src={campaign.campaign_image_url}
               alt={campaign.campaign_title}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80';
+              }}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
