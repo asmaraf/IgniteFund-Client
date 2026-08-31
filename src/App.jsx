@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { SmoothScroll } from './components/SmoothScroll';
 
 // Public Pages
 import { Home } from './pages/Home';
@@ -48,7 +49,8 @@ const DashboardRedirect = () => {
 
 export const App = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <SmoothScroll>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Routes>
         {/* Public Routes Wrapped in Main Navbar/Footer */}
         <Route
@@ -261,6 +263,7 @@ export const App = () => {
         {/* Fallback route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </div>
+      </div>
+    </SmoothScroll>
   );
 };

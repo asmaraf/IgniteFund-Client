@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import 'swiper/css';
@@ -30,6 +33,9 @@ import {
   RotateCw,
 } from 'lucide-react';
 import { api } from '../services/api';
+import { SplineScene } from '../components/SplineScene';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const Home = () => {
   const [topCampaigns, setTopCampaigns] = useState([]);
@@ -56,6 +62,48 @@ export const Home = () => {
 
   useEffect(() => {
     loadTopCampaigns();
+  }, []);
+
+  // GSAP ScrollTrigger Counter Animation
+  const statsSectionRef = useRef(null);
+  const creditsCounterRef = useRef(null);
+  const projectsCounterRef = useRef(null);
+  const backersCounterRef = useRef(null);
+  const escrowCounterRef = useRef(null);
+
+  useEffect(() => {
+    if (!statsSectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const counters = [
+        { ref: creditsCounterRef, end: 148500, format: (v) => Math.round(v).toLocaleString() },
+        { ref: projectsCounterRef, end: 42, format: (v) => Math.round(v).toString() },
+        { ref: backersCounterRef, end: 1280, format: (v) => Math.round(v).toLocaleString() },
+        { ref: escrowCounterRef, end: 100, format: (v) => Math.round(v) + '%' },
+      ];
+
+      counters.forEach(({ ref, end, format }) => {
+        if (!ref.current) return;
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: end,
+          duration: 2.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: statsSectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          onUpdate: () => {
+            if (ref.current) {
+              ref.current.textContent = format(obj.val);
+            }
+          },
+        });
+      });
+    }, statsSectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   // Real-world Testimonials with concrete metrics
@@ -331,9 +379,14 @@ export const Home = () => {
                 );
 
                 return (
-                  <div
+                  <motion.div
                     key={campaign._id}
                     className="card"
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    whileHover={{ y: -8, transition: { duration: 0.2 } }}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -466,11 +519,64 @@ export const Home = () => {
                         </Link>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* 3D HARDWARE SIMULATION SECTION (SPLINE + FRAMER MOTION) */}
+      <section style={{ padding: '5.5rem 0', backgroundColor: 'var(--bg-card)', borderTop: '1px solid var(--border-subtle)' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="badge badge-amber" style={{ marginBottom: '0.85rem' }}>
+                <Cpu size={14} /> LIVE 3D TELEMETRY SIMULATION
+              </span>
+              <h2 style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.25 }}>
+                Inspect Prototypes in Real-Time 3D
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.65, marginBottom: '1.75rem' }}>
+                Before pledging credits, backers can rotate, zoom, and inspect engineering schematics and biomimetic models rendered with full WebGL 3D spatial fidelity.
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.25rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                    <Zap size={18} />
+                  </div>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 600 }}>Real-time sensor telemetry &amp; circuit simulation</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(245, 158, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24' }}>
+                    <ShieldCheck size={18} />
+                  </div>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 600 }}>Open-source CAD verified by platform engineers</span>
+                </div>
+              </div>
+
+              <Link to="/explore" className="btn btn-amber btn-lg">
+                <Sparkles size={18} /> Explore Verified Hardware
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <SplineScene height="460px" title="Cybernetic Bionic Actuator Prototype" />
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -660,8 +766,9 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* 5. EXTRA SECTION 3: PLATFORM IMPACT & VERIFIED METRICS */}
+      {/* 5. EXTRA SECTION 3: PLATFORM IMPACT & VERIFIED METRICS WITH GSAP SCROLLTRIGGER */}
       <section
+        ref={statsSectionRef}
         style={{
           padding: '5rem 0',
           background: 'linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-base) 100%)',
@@ -679,7 +786,10 @@ export const Home = () => {
             }}
           >
             <div>
-              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: 'var(--accent-amber)', lineHeight: 1.1 }}>
+              <p
+                ref={creditsCounterRef}
+                style={{ fontSize: '2.8rem', fontWeight: 900, color: 'var(--accent-amber)', lineHeight: 1.1 }}
+              >
                 148,500
               </p>
               <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Credits Funded</p>
@@ -689,7 +799,10 @@ export const Home = () => {
             </div>
 
             <div>
-              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: 'var(--accent-teal)', lineHeight: 1.1 }}>
+              <p
+                ref={projectsCounterRef}
+                style={{ fontSize: '2.8rem', fontWeight: 900, color: 'var(--accent-teal)', lineHeight: 1.1 }}
+              >
                 42
               </p>
               <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Admin Verified Projects</p>
@@ -699,7 +812,10 @@ export const Home = () => {
             </div>
 
             <div>
-              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: '#a5b4fc', lineHeight: 1.1 }}>
+              <p
+                ref={backersCounterRef}
+                style={{ fontSize: '2.8rem', fontWeight: 900, color: '#a5b4fc', lineHeight: 1.1 }}
+              >
                 1,280
               </p>
               <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Verified Backers</p>
@@ -709,7 +825,10 @@ export const Home = () => {
             </div>
 
             <div>
-              <p style={{ fontSize: '2.8rem', fontWeight: 900, color: '#34d399', lineHeight: 1.1 }}>
+              <p
+                ref={escrowCounterRef}
+                style={{ fontSize: '2.8rem', fontWeight: 900, color: '#34d399', lineHeight: 1.1 }}
+              >
                 100%
               </p>
               <p style={{ fontWeight: 700, marginTop: '0.5rem', fontSize: '1rem' }}>Escrow Guarantee</p>
