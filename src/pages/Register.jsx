@@ -233,9 +233,31 @@ export const Register = () => {
             </div>
           </div>
 
-          {/* Email */}
+          {/* Email with real-time format validation */}
           <div className="form-group">
-            <label className="form-label">Email Address</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label className="form-label">Email Address</label>
+              {email && (
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    color: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '#34d399' : '#fbbf24',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  }}
+                >
+                  {/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? (
+                    <>
+                      <CheckCircle size={12} /> Valid email
+                    </>
+                  ) : (
+                    'Enter valid format'
+                  )}
+                </span>
+              )}
+            </div>
             <div style={{ position: 'relative' }}>
               <Mail
                 size={18}
@@ -260,7 +282,7 @@ export const Register = () => {
             </div>
           </div>
 
-          {/* Password with Strength Indicator */}
+          {/* Password with Strength & Requirement Pills */}
           <div className="form-group">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label className="form-label">Password</label>
@@ -294,21 +316,58 @@ export const Register = () => {
             </div>
             {/* Visual strength bar */}
             {password && (
-              <div style={{ display: 'flex', gap: '4px', marginTop: '6px' }}>
-                {[1, 2, 3].map((step) => (
-                  <div
-                    key={step}
+              <>
+                <div style={{ display: 'flex', gap: '4px', marginTop: '6px' }}>
+                  {[1, 2, 3].map((step) => (
+                    <div
+                      key={step}
+                      style={{
+                        height: '4px',
+                        flex: 1,
+                        borderRadius: '2px',
+                        backgroundColor:
+                          strength.level >= step ? strength.color : 'var(--border-subtle)',
+                        transition: 'background-color 0.3s ease',
+                      }}
+                    />
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
+                  <span
                     style={{
-                      height: '4px',
-                      flex: 1,
-                      borderRadius: '2px',
-                      backgroundColor:
-                        strength.level >= step ? strength.color : 'var(--border-subtle)',
-                      transition: 'background-color 0.3s ease',
+                      fontSize: '0.7rem',
+                      color: password.length >= 6 ? '#34d399' : 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.2rem',
                     }}
-                  />
-                ))}
-              </div>
+                  >
+                    <CheckCircle size={10} /> 6+ characters
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      color: /[A-Z]/.test(password) ? '#34d399' : 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.2rem',
+                    }}
+                  >
+                    <CheckCircle size={10} /> Uppercase letter
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      color: /[0-9]/.test(password) ? '#34d399' : 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.2rem',
+                    }}
+                  >
+                    <CheckCircle size={10} /> Number
+                  </span>
+                </div>
+              </>
             )}
           </div>
 
