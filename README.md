@@ -38,7 +38,7 @@ Add your application screenshot here:
 3. The image below will automatically display on GitHub.
 -->
 
-![Project Screenshot](IgniteFund.png)
+![Project Screenshot](IgbiteFund.png)
 
 > _Note: To display your client UI preview, add a high-resolution screenshot named `Screenshot.png` to the `assets/` directory._
 
